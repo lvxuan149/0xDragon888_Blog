@@ -1,0 +1,3293 @@
+This file is a merged representation of the entire codebase, combined into a single document by Repomix.
+
+================================================================
+File Summary
+================================================================
+
+Purpose:
+--------
+This file contains a packed representation of the entire repository's contents.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+
+File Format:
+------------
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Multiple file entries, each consisting of:
+  a. A separator line (================)
+  b. The file path (File: path/to/file)
+  c. Another separator line
+  d. The full contents of the file
+  e. A blank line
+
+Usage Guidelines:
+-----------------
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+
+Notes:
+------
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+
+Additional Info:
+----------------
+
+================================================================
+Directory Structure
+================================================================
+components/
+  Beam/
+    Beam.tsx
+    style.module.css
+  Navbar/
+    DesktopNav.tsx
+    MobileNav.tsx
+    Navbar.tsx
+  AllBlogs.tsx
+  BlogLayout.tsx
+  BlurImage.tsx
+  Contact.tsx
+  Container.tsx
+  CustomLink.tsx
+  Experience.tsx
+  Footer.tsx
+  Hero.tsx
+  LatestRepos.tsx
+  LinkPreview.tsx
+  Logo.tsx
+  Projects.tsx
+  Prose.tsx
+  Talks.tsx
+  Timeline.tsx
+  Uses.tsx
+constants/
+  events.tsx
+  navItems.tsx
+  projects.tsx
+  stack.tsx
+  timeline.ts
+  user.ts
+  uses.ts
+  workExperience.tsx
+lib/
+  formatDate.ts
+  generateRSSFeed.js
+  getAllBlogs.ts
+  github.ts
+pages/
+  api/
+    hello.ts
+  blogs/
+    what-is-a-blog-anyway/
+      index.mdx
+    what-is-a-website-template/
+      index.mdx
+    index.tsx
+  _app.tsx
+  _document.tsx
+  about.tsx
+  contributions.tsx
+  events.tsx
+  index.tsx
+  projects.tsx
+public/
+  rss/
+    feed.json
+    feed.xml
+  next.svg
+  thirteen.svg
+  vercel.svg
+styles/
+  globals.css
+types/
+  repos.ts
+util/
+  truncateText.ts
+.env.example
+.gitignore
+documentation.md
+next.config.mjs
+package.json
+postcss.config.js
+readme.md
+tailwind.config.js
+tsconfig.json
+
+================================================================
+Files
+================================================================
+
+================
+File: components/Beam/Beam.tsx
+================
+import clsx from "clsx";
+import React, { useEffect, useRef } from "react";
+import { twMerge } from "tailwind-merge";
+import styles from "./style.module.css";
+
+const Beam = ({ showBeam, className }: any) => {
+  const cn = (...values: any) => clsx(twMerge(values));
+  const meteorRef = useRef<any>(null);
+
+  useEffect(() => {
+    if (showBeam) {
+      const meteor = meteorRef.current;
+
+      meteor.addEventListener("animationend", () => {
+        meteor.style.visibility = "hidden";
+        const animationDelay = Math.floor(Math.random() * (3 - 0) + 0);
+        const animationDuration = Math.floor(Math.random() * (4 - 0) + 0);
+        const meteorWidth = Math.floor(Math.random() * (150 - 80) + 80);
+        meteor.style.setProperty("--meteor-delay", `${animationDelay}s`);
+        meteor.style.setProperty("--meteor-duration", `${animationDuration}s`);
+        meteor.style.setProperty("--meteor-width", `${meteorWidth}px`);
+
+        restartAnimation();
+      });
+
+      meteor.addEventListener("animationstart", () => {
+        meteor.style.visibility = "visible";
+      });
+    }
+
+    return () => {
+      if (showBeam) {
+        const meteor = meteorRef.current;
+        if (meteor) {
+          meteor.removeEventListener("animationend", () => {});
+          meteor.removeEventListener("animationstart", () => {});
+        }
+      }
+    };
+  }, []);
+  const restartAnimation = () => {
+    const meteor = meteorRef.current;
+    meteor.style.animation = "none";
+    void meteor.offsetWidth;
+    meteor.style.animation = null;
+  };
+
+  return (
+    showBeam && (
+      <span
+        ref={meteorRef}
+        className={twMerge(
+          "absolute z-20  left-4  h-[0.1rem] w-[0.1rem] rounded-[9999px] bg-blue-700 shadow-[0_0_0_1px_#ffffff10] rotate-[180deg] before:bg-gradient-to-l before:from-transparent before:via-blue-500 before:to-cyan-500",
+          styles.meteor,
+          className
+        )}
+      ></span>
+    )
+  );
+};
+
+export default Beam;
+
+================
+File: components/Beam/style.module.css
+================
+.meteor {
+  transform: rotate(-90deg);
+  animation: meteor 3s linear;
+  animation-delay: var(--meteor-delay, 0s);
+  animation-duration: var(--meteor-duration, 2s);
+}
+
+.meteor::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: var(--meteor-width, 50px);
+  height: 1px;
+}
+
+@keyframes meteor {
+  0% {
+    top: 0;
+    opacity: 0;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    top: 100%;
+    opacity: 0;
+  }
+}
+
+================
+File: components/Navbar/DesktopNav.tsx
+================
+import { CustomLink } from "@/components/CustomLink";
+import { Logo } from "@/components/Logo";
+import { AnimatePresence, motion } from "framer-motion";
+import Link from "next/link";
+import React, { useState } from "react";
+
+export const DesktopNav = ({ navItems }: any) => {
+  let [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  return (
+    <div className="flex flex-row space-x-8 items-center antialiased border px-4 py-2 rounded-2xl border-zinc-700/60 bg-zinc-800 ">
+      <Logo />
+      {navItems.map((navItem: any, idx: number) => (
+        <CustomLink
+          key={`link=${idx}`}
+          href={navItem.link}
+          className="text-white text-sm relative"
+          onMouseEnter={() => setHoveredIndex(idx)}
+          onMouseLeave={() => setHoveredIndex(null)}
+        >
+          <AnimatePresence>
+            {hoveredIndex === idx && (
+              <motion.span
+                className="absolute inset-0  transform  bg-zinc-700 scale-105 rounded-xl"
+                layoutId="hoverBackground"
+                initial={{ opacity: 0 }}
+                animate={{
+                  opacity: 1,
+                  transition: { duration: 0.15 },
+                }}
+                exit={{
+                  opacity: 0,
+                  transition: { duration: 0.15, delay: 0.2 },
+                }}
+              />
+            )}
+          </AnimatePresence>
+          <span className="relative z-10 px-2 py-2 inline-block">
+            {navItem.name}
+          </span>
+        </CustomLink>
+      ))}
+    </div>
+  );
+};
+
+================
+File: components/Navbar/MobileNav.tsx
+================
+import { Logo } from "@/components/Logo";
+import { AnimatePresence, motion } from "framer-motion";
+import { useRouter } from "next/router";
+import React, { useState } from "react";
+import { IoIosCloseCircleOutline, IoIosMenu } from "react-icons/io";
+import { CustomLink } from "../CustomLink";
+
+export const MobileNav = ({ navItems }: any) => {
+  const [open, setOpen] = useState(false);
+  const item = {
+    exit: {
+      opacity: 0,
+      transition: {
+        ease: "easeInOut",
+        duration: 0.1,
+      },
+    },
+    show: {
+      height: "100vh",
+      opacity: 1,
+      transition: { duration: 0.1, staggerChildren: 0.1 },
+    },
+    hidden: {
+      opacity: 0,
+      height: 0,
+    },
+  };
+
+  const childItems = {
+    hidden: { x: "-2vw", opacity: 0 },
+    show: { x: 0, opacity: 1 },
+  };
+  const router = useRouter();
+  return (
+    <>
+      <div className="flex flex-row justify-between items-center w-full">
+        <Logo textClassName="text-zinc-100" />
+        <IoIosMenu onClick={() => setOpen(!open)} className="text-zinc-100" />
+      </div>
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            variants={item}
+            initial="hidden"
+            animate="show"
+            exit="exit"
+            className="fixed inset-0 bg-zinc-800 z-50 flex flex-col justify-center items-center space-y-10  text-xl font-bold text-zinc-600  hover:text-zinc-800 transition duration-200"
+          >
+            <IoIosCloseCircleOutline
+              className="absolute right-8 top-14 h-5 w-5 text-zinc-100"
+              onClick={() => setOpen(!open)}
+            />
+            {navItems.map((navItem: any, idx: number) => (
+              <CustomLink
+                key={`link=${idx}`}
+                href={navItem.link}
+                className="text-zinc-200"
+              >
+                <motion.span variants={childItems} className="block">
+                  {navItem.name}
+                </motion.span>
+              </CustomLink>
+            ))}
+            <motion.a
+              variants={childItems}
+              href="/cv.pdf"
+              target="__blank"
+              className="text-white inline-flex items-center justify-center rounded-[10px] bg-gradient-to-b from-[#464d55] to-[#25292e] text-sm px-4 py-2 shadow-[0_10px_20px_rgba(0,_0,_0,_.1),0_3px_6px_rgba(0,_0,_0,_.05)] hover:shadow-[rgba(0,_1,_0,_.2)_0_2px_8px] active:outline-none hover:opacity-80 "
+            >
+              Download CV
+            </motion.a>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  );
+};
+
+================
+File: components/Navbar/Navbar.tsx
+================
+import { navItems } from "@/constants/navItems";
+import Link from "next/link";
+
+import React from "react";
+
+import { DesktopNav } from "./DesktopNav";
+import { MobileNav } from "./MobileNav";
+
+const Navbar = () => {
+  return (
+    <div className="flex flex-row items-center justify-between sm:justify-between py-8 max-w-5xl mx-auto relative z-[100] px-8 ">
+      <div className="hidden lg:flex w-full justify-between">
+        <DesktopNav navItems={navItems} />
+
+        <a
+          href="/cv.pdf"
+          target="__blank"
+          className="font-medium text-white inline-flex items-center justify-center rounded-[10px] bg-gradient-to-b from-[#464d55] to-[#25292e] text-sm px-4 py-2 transition duration-150 shadow-[0_10px_20px_rgba(0,_0,_0,_.1),0_3px_6px_rgba(0,_0,_0,_.05)] hover:shadow-[rgba(0,_1,_0,_.2)_0_2px_8px] active:outline-none hover:opacity-80 "
+        >
+          Download CV
+        </a>
+      </div>
+
+      <div className="flex lg:hidden w-full">
+        <MobileNav navItems={navItems} />
+      </div>
+    </div>
+  );
+};
+
+export default Navbar;
+
+================
+File: components/AllBlogs.tsx
+================
+import { formatDate } from "@/lib/formatDate";
+import { AnimatePresence, motion } from "framer-motion";
+import Link from "next/link";
+import { useState } from "react";
+
+function Blog({ article, hoveredIndex, setHoveredIndex, idx }: any) {
+  return (
+    <Link
+      className="relative md:p-8"
+      href={`/blogs/${article.slug}`}
+      onMouseEnter={() => setHoveredIndex(idx)}
+      onMouseLeave={() => setHoveredIndex(null)}
+    >
+      <AnimatePresence>
+        {hoveredIndex === idx && (
+          <motion.span
+            className="absolute inset-0 h-full w-full bg-zinc-800/[0.8]  rounded-2xl"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{
+              opacity: 1,
+              scale: 1,
+              transition: { duration: 0.15 },
+            }}
+            exit={{
+              opacity: 0,
+              scale: 0.9,
+              transition: { duration: 0.15, delay: 0.2 },
+            }}
+          />
+        )}
+      </AnimatePresence>
+      <div className="relative z-50">
+        <small className="md:border-l md:border-zinc-700 md:pl-4  text-zinc-500 block">
+          {formatDate(article.date)}
+        </small>
+        <h2 className="text-zinc-200 font-bold text-lg mt-4">
+          {article.title}
+        </h2>
+        <p className="text-zinc-200 font-normal text-sm mt-4 leading-loose max-w-4xl">
+          {article.description}
+        </p>
+        <p className="text-cyan-500 text-sm mt-6 block">Read More</p>
+      </div>
+    </Link>
+  );
+}
+
+export default function AllBlogs({ blogs }: any) {
+  let [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  return (
+    <div className="">
+      <div className="flex max-w-3xl flex-col space-y-16">
+        {blogs.map((article: any, idx: number) => (
+          <Blog
+            key={article.slug}
+            article={article}
+            idx={idx}
+            hoveredIndex={hoveredIndex}
+            setHoveredIndex={setHoveredIndex}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+================
+File: components/BlogLayout.tsx
+================
+import Head from "next/head";
+import { useRouter } from "next/router";
+
+import { formatDate } from "@/lib/formatDate";
+import { Prose } from "@/components/Prose";
+import { Container } from "./Container";
+
+function ArrowLeftIcon(props: any) {
+  return (
+    <svg viewBox="0 0 16 16" fill="none" aria-hidden="true" {...props}>
+      <path
+        d="M7.25 11.25 3.75 8m0 0 3.5-3.25M3.75 8h8.5"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+export function BlogLayout({
+  children,
+  meta,
+  isRssFeed = false,
+  previousPathname,
+}: any) {
+  let router = useRouter();
+
+  if (isRssFeed) {
+    return children;
+  }
+
+  return (
+    <Container>
+      <div className="xl:relative md:mt-20 p-8">
+        <div className="mx-auto max-w-2xl">
+          {previousPathname && (
+            <button
+              type="button"
+              onClick={() => router.back()}
+              aria-label="Go back to articles"
+              className="group mb-8 flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-md shadow-zinc-800/5 ring-1 ring-zinc-900/5 transition  lg:absolute lg:-left-5 lg:mb-0 lg:-mt-2 xl:-top-1.5 xl:left-0 xl:mt-0"
+            >
+              <ArrowLeftIcon className="h-4 w-4 stroke-zinc-500 transition group-hover:stroke-zinc-700 d" />
+            </button>
+          )}
+          <article>
+            <header className="flex flex-col">
+              <h1 className="mt-6 text-4xl font-bold tracking-tight text-zinc-200  sm:text-5xl">
+                {meta.title}
+              </h1>
+              <time
+                dateTime={meta.date}
+                className="order-first flex items-center text-base text-zinc-400 "
+              >
+                <span className="h-4 w-0.5 rounded-full bg-zinc-200 " />
+                <span className="ml-3">{formatDate(meta.date)}</span>
+              </time>
+            </header>
+            <Prose className="mt-8">{children}</Prose>
+          </article>
+        </div>
+      </div>
+    </Container>
+  );
+}
+
+================
+File: components/BlurImage.tsx
+================
+import clsx from "clsx";
+import Image from "next/image";
+import React, { useState } from "react";
+
+interface IBlurImage {
+  height?: any;
+  width?: any;
+  src?: string | any;
+  objectFit?: any;
+  className?: string | any;
+  alt?: string | undefined;
+  layout?: any;
+
+  [x: string]: any;
+}
+
+export const BlurImage = ({
+  height,
+  width,
+  src,
+  className,
+  objectFit,
+  alt,
+  layout,
+  ...rest
+}: IBlurImage) => {
+  const [isLoading, setLoading] = useState(true);
+  return (
+    <Image
+      className={clsx(
+        "transition duration-500",
+        isLoading ? "blur-sm scale-100" : " blur-0 scale-100",
+        className
+      )}
+      onLoadingComplete={() => setLoading(false)}
+      src={src}
+      width={width}
+      height={height}
+      loading="lazy"
+      decoding="async"
+      blurDataURL={src}
+      layout={layout}
+      alt={alt ? alt : "Avatar"}
+      {...rest}
+    />
+  );
+};
+
+================
+File: components/Contact.tsx
+================
+import React, { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+
+export const Contact = () => {
+  const [open, setOpen] = useState(false);
+  const [success, setSuccess] = useState<string | null>("");
+  const [error, setError] = useState<string | null>("");
+  const [loading, setLoading] = useState<Boolean>(false);
+
+  const [formState, setFormState] = useState({
+    email: {
+      value: "",
+      error: "",
+    },
+    message: {
+      value: "",
+      error: "",
+    },
+  });
+
+  const dropIn = {
+    hidden: {
+      y: "4vh",
+      opacity: 0,
+    },
+    visible: {
+      y: "0",
+      opacity: 1,
+      transition: {
+        duration: 0.2,
+        type: "stiff",
+        damping: 25,
+      },
+    },
+    exit: {
+      y: "4vh",
+      opacity: 0,
+    },
+  };
+
+  const onChangeHandler = (field: any, value: any) => {
+    let state = {
+      [field]: {
+        value,
+        error: null,
+      },
+    };
+    setFormState({ ...formState, ...state });
+  };
+
+  const handleSubmit = async () => {
+    let { email, message } = formState;
+    console.log("email", email, "message", message);
+    let updatedState = { ...formState };
+    let regex =
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (!email.value) {
+      updatedState.email.error = `Oops! Email cannot be empty.`;
+      setFormState({ ...updatedState });
+      return;
+    }
+
+    if (!email.value.toLowerCase().match(regex)) {
+      updatedState.email.error = `Please enter a valid email address`;
+      setFormState({ ...updatedState });
+      return;
+    }
+    if (!message.value) {
+      updatedState.message.error = `Oops! Message cannot be empty.`;
+      setFormState({ ...updatedState });
+      return;
+    }
+    // Everything is fine - Proceed with the API call.
+
+    // Your API Call goes here
+  };
+
+  const handleButtonClick = () => {
+    setOpen(!open);
+    setFormState({
+      email: {
+        value: "",
+        error: "",
+      },
+      message: {
+        value: "",
+        error: "",
+      },
+    });
+    setLoading(false);
+    setError("");
+    setSuccess("");
+  };
+  return (
+    <AnimatePresence initial={false} onExitComplete={() => null}>
+      <div className="fixed right-4 md:right-10 bottom-10 flex flex-col items-end z-[99999]">
+        {open && (
+          <motion.div
+            variants={dropIn}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            className="mb-4 rounded-xl shadow-2xl bg-zinc-800   flex flex-col overflow-hidden mx-4 md:mx-0"
+          >
+            <div className="p-4 bg-zinc-700 ">
+              <h2 className="text-zinc-200 font-bold text-sm md:text-xl ">
+                Have a question? Drop in your message 👇
+              </h2>
+              <small className="hidden md:block text-xs text-zinc-400 mb-10 ">
+                It won't take more than 10 seconds. Shoot your shot. 😉
+              </small>
+            </div>
+            <div className="content p-6 flex flex-col bg-zinc-800">
+              <label className="text-sm font-normal text-zinc-400 mb-2 ">
+                Email Address
+              </label>
+              <input
+                type="email"
+                value={formState.email.value}
+                onChange={(e) => onChangeHandler("email", e.target.value)}
+                className="text-zinc-400 rounded-md border bg-zinc-800 border-zinc-700 py-1 px-2 focus:outline-none focus:border-gray-400 placeholder:text-sm  mb-1"
+                placeholder="johndoe@xyz.com"
+              />
+
+              <small className="h-4 min-h-4 text-red-500 font-semibold">
+                {formState.email.error && formState.email.error}
+              </small>
+
+              <label className="text-sm font-normal text-zinc-400 mb-2 ">
+                Message
+              </label>
+              <textarea
+                rows={3}
+                value={formState.message.value}
+                onChange={(e) => onChangeHandler("message", e.target.value)}
+                className="text-zinc-400 rounded-md border border-zinc-700 py-1 px-2 bg-zinc-800 focus:outline-none focus:border-gray-400 placeholder:text-sm   mb-1"
+                placeholder="I'd love a compliment from you."
+              />
+              <small className="h-4 min-h-4 text-red-500 font-semibold mb-4">
+                {formState.message.error && formState.message.error}
+              </small>
+              <button
+                onClick={handleSubmit}
+                className="text-zinc-100  w-full px-4 py-2 md:py-4 border-2 border-zinc-800 bg-zinc-700 rounded-md font-normal text-sm  mb-4 transition duration-200 hover:shadow-none"
+              >
+                {loading ? "Submitting..." : "Submit"}
+              </button>
+              <small className="h-4 min-h-4 mb-4">
+                {success && (
+                  <p className="text-green-500 font-semibold text-sm">
+                    {success}
+                  </p>
+                )}
+                {error && (
+                  <p className="text-red-500 font-semibold text-sm">{error}</p>
+                )}
+              </small>
+            </div>
+          </motion.div>
+        )}
+        <button
+          onClick={handleButtonClick}
+          className="bg-zinc-700  w-14 h-14 rounded-full  flex items-center justify-center hover:scale-105 hover:shadow-xl transition duration-200 shadow-lg"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            className="w-6 h-6 text-zinc-100"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M2.25 12.76c0 1.6 1.123 2.994 2.707 3.227 1.068.157 2.148.279 3.238.364.466.037.893.281 1.153.671L12 21l2.652-3.978c.26-.39.687-.634 1.153-.67 1.09-.086 2.17-.208 3.238-.365 1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z"
+            />
+          </svg>
+        </button>
+      </div>
+    </AnimatePresence>
+  );
+};
+
+================
+File: components/Container.tsx
+================
+import clsx from "clsx";
+import Head from "next/head";
+import { useRouter } from "next/router";
+import React, { useState } from "react";
+import { AiFillRightCircle } from "react-icons/ai";
+import { Contact } from "./Contact";
+import { Footer } from "./Footer";
+
+import Navbar from "./Navbar/Navbar";
+
+export const Container = (props: any) => {
+  const { children, className, ...customMeta } = props;
+  const router = useRouter();
+
+  const title = "Devpro | Portfolio Template";
+  const meta = {
+    title,
+    description: `A portfolio template for developers and designers.`,
+    type: "website",
+    image: "https://devpro.aceternity.com/banner.png",
+    ...customMeta,
+  };
+
+  return (
+    <>
+      <Head>
+        <title>{meta.title}</title>
+        <meta name="robots" content="follow, index" />
+        <meta content={meta.description} name="description" />
+        <meta
+          property="og:url"
+          content={`https://yourwebsite.com${router.asPath}`}
+        />
+        <link
+          rel="canonical"
+          href={`https://yourwebsite.com${router.asPath}`}
+        />
+        <meta property="og:type" content={meta.type} />
+        <meta property="og:site_name" content="yourwebsite" />
+        <meta property="og:description" content={meta.description} />
+        <meta property="og:title" content={meta.title} />
+        <meta property="og:image" content={meta.image} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@yourwebsite" />
+        <meta name="twitter:title" content={meta.title} />
+        <meta name="twitter:description" content={meta.description} />
+        <meta name="twitter:image" content={meta.image} />
+      </Head>
+
+      <main className={clsx("min-h-screen antialiased bg-zinc-900", className)}>
+        <div className="bg-zinc-800 flex py-2">
+          <div className="max-w-4xl mx-auto ">
+            <a
+              href="https://aceternity.lemonsqueezy.com/checkout/buy/f72cfb2a-7598-4e4e-8ef2-1f68c91d9414"
+              target="__blank"
+              className="text-zinc-300 flex flex-row space-x-1 items-center text-sm"
+            >
+              <span>Buy now!</span>{" "}
+              <AiFillRightCircle className="inline-block" />
+            </a>
+          </div>
+        </div>
+        <Navbar />
+        {children}
+        <Footer />
+        <Contact />
+      </main>
+    </>
+  );
+};
+
+================
+File: components/CustomLink.tsx
+================
+import Link from "next/link";
+
+export const CustomLink = (props: any) => {
+  const href = props.href;
+  const isInternalLink = href && (href.startsWith("/") || href.startsWith("#"));
+
+  if (isInternalLink) {
+    return <Link href={href} {...props} />;
+  }
+
+  return <a target="__blank" rel="noopener noreferrer" {...props} />;
+};
+
+================
+File: components/Experience.tsx
+================
+import { workExperience } from "@/constants/workExperience";
+import clsx from "clsx";
+import { AnimatePresence, motion } from "framer-motion";
+import React, { useState } from "react";
+import Beam from "./Beam/Beam";
+import moment from "moment";
+import { BsCheck2 } from "react-icons/bs";
+import Image from "next/image";
+
+export const Experience = () => {
+  let [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [activeWorkExperience, setActiveWorkExperience] = useState(
+    workExperience[0]
+  );
+  return (
+    <div className=" max-w-5xl mx-auto px-8">
+      <h1 className="text-2xl md:text-3xl text-white font-bold max-w-5xl mx-auto mt-20 md:mt-40">
+        Work Experience
+      </h1>
+      <p className="text-zinc-400 text-sm md:text-base max-w-2xl mt-4 leading-loose tracking-wide ">
+        I switch a lot of companies. It's mostly about the culture.
+      </p>
+      <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-2 mt-20 max-w-2xl mx-auto">
+        <div className="flex flex-row md:flex-col relative overflow-x-auto md:overflow-x-visible">
+          <div className="absolute -left-6 w-px h-full bg-zinc-800 overflow-hidden">
+            <Beam showBeam={true} className={`-left-0`} />
+          </div>
+
+          {workExperience.map((exp, idx) => (
+            <div
+              key={`exp-${idx}`}
+              className="relative my-2"
+              onMouseEnter={() => setHoveredIndex(idx)}
+              onMouseLeave={() => setHoveredIndex(null)}
+            >
+              <AnimatePresence>
+                {hoveredIndex === idx && (
+                  <motion.span
+                    className="absolute inset-0 h-full w-full bg-zinc-800  rounded-md"
+                    layoutId="hoverBackground"
+                    initial={{ opacity: 0 }}
+                    animate={{
+                      opacity: 1,
+                      transition: { duration: 0.15 },
+                    }}
+                    exit={{
+                      opacity: 0,
+                      transition: { duration: 0.15, delay: 0.2 },
+                    }}
+                  />
+                )}
+              </AnimatePresence>
+              <button
+                onClick={() => setActiveWorkExperience(exp)}
+                className={clsx(
+                  "px-4 py-2 text-zinc-400 relative z-20 min-w-28 w-full text-left rounded-md flex flex-row space-x-2 items-center group",
+                  activeWorkExperience?.company === exp.company
+                    ? "bg-zinc-800"
+                    : null
+                )}
+              >
+                <div className="bg-red-500 p-1 h-6 w-6 flex items-center justify-center rounded-full bg-gradient-to-br from-zinc-700 to-zinc-800">
+                  <Image
+                    src={exp.logo}
+                    width={12}
+                    height={12}
+                    alt={exp.company}
+                    className="flex-shrink-0 transition duration-200"
+                  />
+                </div>
+                <span>{exp.company}</span>
+              </button>
+            </div>
+          ))}
+        </div>
+        <div className="md:pl-10  flex-1">
+          <div className="flex flex-col space-y-4">
+            <AnimatePresence>
+              <motion.div
+                className="flex flex-col space-y-2"
+                initial={{ opacity: 0 }}
+                animate={{
+                  opacity: 1,
+                  transition: { duration: 0.15 },
+                }}
+                exit={{
+                  opacity: 0,
+                  transition: { duration: 0.15 },
+                }}
+                layoutId={activeWorkExperience?.company}
+              >
+                <h1 className="text-2xl font-bold text-zinc-100">
+                  {activeWorkExperience?.role}{" "}
+                  <span className="text-cyan-500">
+                    @ {activeWorkExperience?.company}
+                  </span>
+                </h1>
+
+                <div className="text-zinc-400 text-sm tracking-widest">
+                  {moment(activeWorkExperience?.startDate).format("MMM YYYY")} -{" "}
+                  {moment(activeWorkExperience?.endDate).format("MMM YYYY")}
+                </div>
+                <p className="text-zinc-400 text-sm">
+                  {activeWorkExperience?.location}
+                </p>
+
+                <div>
+                  {activeWorkExperience?.description.map((bullet, idx) => (
+                    <div
+                      key={`bullet-${idx}`}
+                      className="flex flex-row space-x-2 items-start my-2"
+                    >
+                      <BsCheck2 className="text-cyan-500 mt-[3px] flex-shrink-0" />
+                      <span className="text-zinc-400 text-sm">{bullet}</span>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+================
+File: components/Footer.tsx
+================
+import React from "react";
+
+import { CustomLink } from "./CustomLink";
+import {
+  AiOutlineGithub,
+  AiOutlineLinkedin,
+  AiOutlineTwitter,
+} from "react-icons/ai";
+import { navItems } from "@/constants/navItems";
+import { Logo } from "./Logo";
+import { user } from "@/constants/user";
+
+export const Footer = () => {
+  const socials = [
+    {
+      name: "twitter",
+      icon: (
+        <AiOutlineTwitter className="h-5 w-5 hover:text-primary transition duration-150" />
+      ),
+      link: user.twitter,
+    },
+    {
+      name: "LinkedIn",
+      icon: (
+        <AiOutlineLinkedin className="h-5 w-5 hover:text-primary transition duration-150" />
+      ),
+      link: user.linkedin,
+    },
+    {
+      name: "GitHub",
+      icon: (
+        <AiOutlineGithub className="h-5 w-5 hover:text-primary transition duration-150" />
+      ),
+      link: user.github,
+    },
+  ];
+  return (
+    <div className="border-t border-slate-900/5 py-10 max-w-6xl mx-auto px-8">
+      <div className="flex flex-col justify-center items-center py-10 ">
+        <Logo textClassName="text-white text-xl" />
+
+        <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4 mt-4">
+          {navItems.map((navItem: any, idx: number) => (
+            <CustomLink
+              key={`footer-link-${idx}`}
+              href={navItem.link}
+              className="text-zinc-100 text-sm relative"
+            >
+              <span className="relative z-10 px-2 py-2 inline-block">
+                {navItem.name}
+              </span>
+            </CustomLink>
+          ))}
+        </div>
+        <p className="text-zinc-200 text-sm font-light text-center mt-8 border-t border-zinc-800 pt-4">
+          © {new Date().getFullYear()} Devpro Portfolio Template. All rights
+          reserved.
+        </p>
+        <div className="flex flex-row justify-center space-x-2 mt-2">
+          {socials.map((socialLink: any, idx: number) => (
+            <a
+              key={`footer-link-${idx}`}
+              href={socialLink.link}
+              className="text-zinc-500 text-sm relative"
+              target="__blank"
+            >
+              <span className="relative z-10 px-2 py-2 inline-block">
+                {socialLink.icon}
+              </span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+================
+File: components/Hero.tsx
+================
+import React from "react";
+import { LinkPreview } from "./LinkPreview";
+
+export const Hero = () => {
+  return (
+    <div className="max-w-5xl mx-auto mt-10 md:mt-20 px-8 ">
+      <h1 className="font-bold text-3xl md:text-5xl leading-tight text-zinc-50 max-w-3xl">
+        I'm a Ai Native Develop that rarely{" "}
+        <span className="text-cyan-500">writes code.</span>
+      </h1>
+      <p className="text-zinc-400 text-sm md:text-base max-w-2xl mt-8 leading-loose tracking-wide">
+        Meet Manu Arora, the self-proclaimed code wizard who can turn caffeine
+        into beautiful websites. His passion for building clean and functional
+        designs is only rivaled by his passion for finding the perfect GIF to
+        express his excitement.
+      </p>
+      <div className="mt-8 text-zinc-400 text-sm md:text-base max-w-2xl leading-loose tracking-wide">
+        Building{" "}
+        <LinkPreview
+          className={
+            "text-zinc-200 font-bold hover:text-cyan-500 transition duration-150 outline-none"
+          }
+          url="https://algochurn.com"
+        >
+          Algochurn
+        </LinkPreview>{" "}
+        and{" "}
+        <LinkPreview
+          className={
+            "text-zinc-200 font-bold hover:text-cyan-500 transition duration-150"
+          }
+          url="https://aceternity.com"
+        >
+          Aceternity
+        </LinkPreview>{" "}
+        when I'm not working on my day job.
+      </div>
+    </div>
+  );
+};
+
+================
+File: components/LatestRepos.tsx
+================
+import { Repository } from "@/types/repos";
+import { truncateText } from "@/util/truncateText";
+import { AnimatePresence, motion } from "framer-motion";
+import Link from "next/link";
+import React, { useState } from "react";
+import { AiOutlineFork, AiOutlineStar } from "react-icons/ai";
+
+export const LatestRepos = ({
+  repos,
+  showMore = false,
+}: {
+  repos: Repository[];
+  showMore?: Boolean;
+}) => {
+  let [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
+  return (
+    <div className="max-w-5xl mx-auto px-8 relative mb-20 overflow-hidden">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 mt-20 mx-auto">
+        {repos.map((repo: Repository, idx: number) => (
+          <a
+            href={repo.html_url}
+            onMouseEnter={() => setHoveredIndex(idx)}
+            key={repo?.html_url}
+            onMouseLeave={() => setHoveredIndex(null)}
+            className="group relative rounded-2xl border border-zinc-800 shadow-sm p-4 bg-gradient-to-b from-zinc-800 to-zinc-900 flex flex-col justify-between h-full"
+          >
+            <AnimatePresence>
+              {hoveredIndex === idx && (
+                <motion.span
+                  className="absolute inset-0 h-full w-full bg-zinc-800  rounded-xl"
+                  layoutId="hoverBackground"
+                  initial={{ opacity: 0 }}
+                  animate={{
+                    opacity: 1,
+                    transition: { duration: 0.15 },
+                  }}
+                  exit={{
+                    opacity: 0,
+                    transition: { duration: 0.15, delay: 0.2 },
+                  }}
+                />
+              )}
+            </AnimatePresence>
+            <div className="relative z-50 flex flex-col justify-between h-full">
+              <div>
+                <h2 className="text-base text-zinc-100 font-bold">
+                  {repo.name}
+                </h2>
+                <p className=" text-zinc-400 font-normal text-sm leading-loose mt-4 tracking-wide">
+                  {truncateText(repo?.description, 100)}
+                </p>
+              </div>
+
+              <div className="mt-4 flex flex-row space-x-4 items-center text-zinc-500 group-hover:text-cyan-500">
+                <div className=" font-normal text-sm flex flex-row space-x-1 items-center ">
+                  <AiOutlineFork className="h-4 w-4 stroke-1 " />
+                  <span className=" group-hover:text-cyan-500">
+                    {repo.forks_count}
+                  </span>
+                </div>
+                <div className=" font-normal text-sm flex flex-row space-x-1 items-center">
+                  <AiOutlineStar className="h-4 w-4 stroke-1 " />
+                  <span className="">{repo.stargazers_count}</span>
+                </div>
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+      {showMore && (
+        <div>
+          <div className="absolute h-56 max-w-5xl mx-auto w-full bottom-0 bg-zinc-900 z-[60] [mask-image:linear-gradient(to_bottom,transparent,white_10rem,white)] transition duration-500 flex items-center justify-center" />
+
+          <div className="flex justify-center relative z-[70] ">
+            <Link
+              href="/contributions"
+              className="text-zinc-200 border border-zinc-600 bg-zinc-900 px-8 py-2 rounded-lg hover:border-zinc-700 hover:bg-zinc-800/[0.8] transition duration-200"
+            >
+              Show More
+            </Link>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+================
+File: components/LinkPreview.tsx
+================
+import { Portal, Transition } from "@headlessui/react";
+import * as HoverCardPrimitive from "@radix-ui/react-hover-card";
+import cx from "clsx";
+import Image from "next/image";
+import { encode } from "qss";
+import React from "react";
+
+export const LinkPreview = ({
+  children,
+  url,
+  className,
+}: {
+  children: React.ReactNode;
+  url: string;
+  className?: string;
+}) => {
+  const width = 200;
+  const height = 125;
+  const quality = 50;
+  const layout = "fixed";
+
+  // Simplifies things by encoding our microlink params into a query string.
+  const params = encode({
+    url,
+    screenshot: true,
+    meta: false,
+    embed: "screenshot.url",
+    colorScheme: "dark",
+    "viewport.isMobile": true,
+    "viewport.deviceScaleFactor": 1,
+
+    "viewport.width": width * 3,
+    "viewport.height": height * 3,
+  });
+
+  const src = `https://api.microlink.io/?${params}`;
+
+  const [isOpen, setOpen] = React.useState(false);
+  // const [static, setStatic] = useState(false);
+
+  // if (staticImage) setStatic(true);
+
+  const [isMounted, setIsMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  return (
+    <>
+      {/**
+       * Microlink.io + next/image can take a few seconds to fetch and generate
+       * a screenshot. The delay makes <LinkPreview> pointless. As a hacky
+       * solution we create a second <Image> in a Portal after the component has
+       * mounted. This <Image> triggers microlink.io + next/image so that the
+       * image itself is ready by the time the user hovers on a <LinkPreview>.
+       * Not concerned about the performance impact because <Image>'s are cached
+       * after they are generated and the images themselves are tiny (< 10kb).
+       */}
+      {isMounted ? (
+        <Portal>
+          <div className="hidden">
+            <Image
+              src={src}
+              width={width}
+              height={height}
+              quality={quality}
+              priority={true}
+              alt="Preview Link"
+            />
+          </div>
+        </Portal>
+      ) : null}
+
+      <HoverCardPrimitive.Root
+        openDelay={50}
+        onOpenChange={(open) => {
+          setOpen(open);
+        }}
+      >
+        <HoverCardPrimitive.Trigger className={className} href={url}>
+          {children}
+        </HoverCardPrimitive.Trigger>
+
+        <HoverCardPrimitive.Content side="top" align="center" sideOffset={10}>
+          <Transition
+            show={isOpen}
+            appear={true}
+            enter="transform transition duration-300 origin-bottom ease-out"
+            enterFrom="opacity-0 translate-y-2 scale-0"
+            enterTo="opacity-100 translate-y-0 scale-100"
+            className=" rounded-xl"
+          >
+            <a
+              href={url}
+              className="block p-1 bg-gradient-to-t from-slate-900 via-slate-800 to-slate-600 border border-transparent  rounded-xl hover:border-zinc-800 relative overflow-hidden"
+              // Unfortunate hack to remove the weird whitespace left by
+              // next/image wrapper div
+              // https://github.com/vercel/next.js/issues/18915
+              style={{ fontSize: 0 }}
+            >
+              <div className="absolute inset-0 w-full h-full z-20 bg-zinc-900 [mask-image:linear-gradient(to_bottom,transparent,transparent,white)]" />
+              <Image
+                src={src}
+                width={width}
+                height={height}
+                quality={quality}
+                alt="Preview Link"
+                priority={true}
+                className="rounded-lg"
+              />
+            </a>
+          </Transition>
+        </HoverCardPrimitive.Content>
+      </HoverCardPrimitive.Root>
+    </>
+  );
+};
+
+================
+File: components/Logo.tsx
+================
+import clsx from "clsx";
+
+import Link from "next/link";
+import React from "react";
+import { twMerge } from "tailwind-merge";
+import { BlurImage } from "./BlurImage";
+
+export const Logo = ({
+  textClassName,
+  logoClassName,
+}: {
+  textClassName?: string;
+  logoClassName?: string;
+}) => {
+  return (
+    <Link
+      href="/"
+      className={clsx(
+        "font-bold   text-sm flex items-center justify-center text-white space-x-2",
+        textClassName
+      )}
+    >
+      <BlurImage
+        width={30}
+        height={30}
+        src={`/images/avatar.png`}
+        className="rounded-full"
+      />
+      <span className={twMerge("font-inter font-bold", textClassName)}>
+        Tyler Durden
+      </span>
+    </Link>
+  );
+};
+
+================
+File: components/Projects.tsx
+================
+import { projects } from "@/constants/projects";
+import { AnimatePresence, motion } from "framer-motion";
+import Image from "next/image";
+import React, { useState } from "react";
+import { AiFillCode } from "react-icons/ai";
+
+import { HiOutlineCodeBracketSquare } from "react-icons/hi2";
+
+import { BsTerminal } from "react-icons/bs";
+
+export const Projects = () => {
+  let [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
+  return (
+    <div className="max-w-5xl mx-auto px-8">
+      <div className="grid grid-cols-1 md:grid-cols-2  lg:grid-cols-3 gap-10 mt-20">
+        {projects.map((project, idx) => (
+          <a
+            href={project.link}
+            key={project?.link}
+            className="relative group  block p-2"
+            onMouseEnter={() => setHoveredIndex(idx)}
+            onMouseLeave={() => setHoveredIndex(null)}
+          >
+            <AnimatePresence>
+              {hoveredIndex === idx && (
+                <motion.span
+                  className="absolute inset-0 h-full w-full bg-zinc-800/[0.8]  rounded-3xl"
+                  layoutId="hoverBackground"
+                  initial={{ opacity: 0 }}
+                  animate={{
+                    opacity: 1,
+                    transition: { duration: 0.15 },
+                  }}
+                  exit={{
+                    opacity: 0,
+                    transition: { duration: 0.15, delay: 0.2 },
+                  }}
+                />
+              )}
+            </AnimatePresence>
+            <div className=" rounded-2xl overflow-hidden bg-zinc-800 border border-transparent group-hover:border-zinc-700 relative z-50">
+              <div className="relative z-50">
+                <div className="h-44 sm:h-60 md:h-44 w-full relative  transition duration-500 bg-black/10 group-hover:bg-transparent">
+                  {/* <div className=" group-hover:bg-zinc-800 absolute h-20 bg-zinc-900 w-full bottom-0 z-20 [mask-image:linear-gradient(to_bottom,transparent,transparent,white)] transition duration-500" /> */}
+                  <Image
+                    src={project.image}
+                    alt={project.title}
+                    fill
+                    className=" absolute inset-0 object-cover object-center  mix-blend-multiply"
+                  />
+                </div>
+                <div className="p-4">
+                  <h4 className="text-zinc-100 font-bold tracking-wide mt-4">
+                    {project.title}
+                  </h4>
+                  <p className="mt-8 text-zinc-400 tracking-wide leading-relaxed text-sm">
+                    {project.description}
+                  </p>
+
+                  <div className="flex flex-row flex-wrap mt-8">
+                    {project.stack.map((stack, idx) => (
+                      <div key={`stack-${idx}`}>
+                        {
+                          <span className="text-gray-500 mr-4 inline-block  stroke-1">
+                            {stack.icon}
+                          </span>
+                        }
+                      </div>
+                    ))}
+                  </div>
+                  <div className="flex flex-row space-x-2 mt-4 items-center px-0.5">
+                    <BsTerminal className="h-3 w-3 stroke-1.5 text-zinc-500 group-hover:text-cyan-500" />
+                    <p
+                      // href={project.link}
+                      className="text-zinc-500 group-hover:text-cyan-500 text-xs"
+                    >
+                      View Source
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+================
+File: components/Prose.tsx
+================
+import clsx from "clsx";
+
+export function Prose({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <div
+      className={clsx(
+        className,
+        "prose prose-sm md:prose-base prose-invert prose-cyan"
+      )}
+    >
+      {children}
+    </div>
+  );
+}
+
+================
+File: components/Talks.tsx
+================
+import { AnimatePresence, motion } from "framer-motion";
+import Image from "next/image";
+import React from "react";
+import { AiFillPlayCircle } from "react-icons/ai";
+
+const Talks = ({
+  url,
+  company,
+  image,
+  title,
+  description,
+}: {
+  url: string;
+  company: string;
+  image: string;
+  title: string;
+  description: string;
+}) => {
+  return (
+    <a
+      href={url}
+      className="flex flex-col md:flex-row space-x-0 md:space-x-4 mb-20 relative justify-start items-start group"
+      target="__blank"
+    >
+      <Image
+        src={image}
+        width={1024}
+        height={720}
+        alt="Video Thumbnail"
+        className="rounded-md w-72 mb-4 md:mb-0 aspect-video object-cover"
+      />
+      <div className="flex flex-col justify-between">
+        <div>
+          <div className="flex flex-row space-x-4 mb-4 relative">
+            <div className="w-[2px] h-full bg-zinc-800  absolute left-0"></div>
+            <p className="text-zinc-500 text-sm">{company}</p>
+          </div>
+          <h4 className="font-bold text-base md:text-xl tracking-tight text-zinc-300 mb-2">
+            {title}
+          </h4>
+          <p className="text-zinc-400 text-sm">{description}</p>
+          <p className="text-zinc-600 group-hover:text-cyan-500 transition duration-200 text-sm mt-2 inline-block">
+            <AiFillPlayCircle className="inline-block mb-[2px]" />{" "}
+            <span>Watch Video</span>
+          </p>
+        </div>
+      </div>
+    </a>
+  );
+};
+
+export default Talks;
+
+================
+File: components/Timeline.tsx
+================
+import { timeline } from "@/constants/timeline";
+import React from "react";
+import { HiOutlineCheckCircle } from "react-icons/hi2";
+import Beam from "./Beam/Beam";
+
+export const Timeline = () => {
+  return (
+    <div className="max-w-3xl mx-auto   divide-zinc-800 relative">
+      <div className="absolute h-full w-[4px] bg-gradient-to-b from-transparent via-cyan-500 to:transparent  -left-4 md:-left-10">
+        <Beam showBeam={true} className={`left-1`} />
+      </div>
+      {timeline.map((item: any, idx: number) => (
+        <div key={`timeline-item-${idx}`} className="border-b border-zinc-800">
+          <h1 className="text-xl font-bold text-zinc-200 my-8 relative">
+            <div className="h-3 md:h-4 w-3 md:w-4 border-2 border-cyan-500 bg-zinc-800 rounded-full absolute -left-[20px] md:-left-[46px] top-2 md:top-1" />
+            {item.year}
+          </h1>
+
+          <div className="mb-8">
+            {item.points.map((point: any, idx: number) => (
+              <div
+                key={`timeline-item-${idx}`}
+                className="flex flex-row space-x-2 items-start my-2"
+              >
+                <HiOutlineCheckCircle className="text-cyan-500 mt-[3px] flex-shrink-0" />
+                <span className="text-zinc-400 text-sm md:text-base">
+                  {point}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+================
+File: components/Uses.tsx
+================
+import { uses } from "@/constants/uses";
+import React from "react";
+
+export const Uses = () => {
+  return (
+    <div>
+      <h2 className="font-bold text-zinc-50 mb-2">Uses</h2>
+      {uses.map((el, idx) => (
+        <div key={`uses-${idx}`} className="my-8">
+          <h4 className="text-base font-bold text-zinc-100">{el.name}</h4>
+          <p className="text-sm text-zinc-400 leading-loose">
+            {el.description}
+          </p>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+================
+File: constants/events.tsx
+================
+export const talks = [
+  {
+    title: `Components Of A Great Portfolio Website`,
+    description: `I talk about how to create a targeted website to land more job interviews and freelance clients with all the other things that matter. Hosted on codementor.`,
+    company: `codementor.io`,
+    image: `/images/talks/codementor.jpg`,
+    url: `https://www.youtube.com/watch?v=viXpJ5Xwtfs`,
+    date: `2021-03-01`,
+  },
+  {
+    title: `Crafting The Perfect Portfolio Website For Developers`,
+    description: ` Talked about how to effectively utilise a portfolio website to put yourself in the best position to win.`,
+    company: `roc8.careers`,
+    image: `/images/talks/roc8.png`,
+    url: `https://www.youtube.com/watch?v=yKVCl1jFkQQ`,
+    date: `2021-02-01`,
+  },
+  {
+    title: `How To Use Algochurn To Clear Technical Interviews With Ease.`,
+    description: `Algochurn is a free resource that helps front-end developers practice machine coding questions. Here I talk about how to effectively make use of Algochurn.`,
+    company: `Youtube`,
+    image: `/images/talks/algochurn-youtube.png`,
+    url: `https://www.youtube.com/watch?v=sZA-WrS39KI&t=19s`,
+    date: `2021-01-01`,
+  },
+  {
+    title: `How To Implement Debouncing In React.`,
+    description: `Debouncing is a method of preventing a function from being invoked too often. In this video, I talk about how to create a custom debounce function from scratch.`,
+    company: `Youtube`,
+    image: `/images/talks/debouncing.png`,
+    url: `https://www.youtube.com/watch?v=uncrKqVtgrc`,
+    date: `2020-12-01`,
+  },
+];
+
+================
+File: constants/navItems.tsx
+================
+export const navItems = [
+  {
+    name: "About",
+    link: "/about",
+  },
+  {
+    name: "Projects",
+    link: "/projects",
+  },
+  {
+    name: "Contributions",
+    link: "/contributions",
+  },
+  {
+    name: "Blogs",
+    link: "/blogs",
+  },
+  {
+    name: "Events",
+    link: "/events",
+  },
+];
+
+================
+File: constants/projects.tsx
+================
+import { stack } from "./stack";
+
+export const projects = [
+  {
+    title: "Algochurn",
+    description:
+      "A web app that allows users to practice for front-end and UI interviews.",
+    image: "/images/projects/algochurn.png",
+    stack: [stack.nextjs, stack.tailwindcss, stack.typescript, stack.react],
+    link: "https://algochurn.com",
+  },
+  {
+    title: "Aceternity",
+    description:
+      "A web design and development agency that gets the job done. Somehow.",
+    image: "/images/projects/aceternity.png",
+    stack: [stack.nextjs, stack.tailwindcss, stack.typescript, stack.react],
+    link: "https://aceternity.com",
+  },
+
+  {
+    title: "Tailwind Master Kit",
+    description:
+      "Buy premium tailwind components and templates for your next project.",
+    image: "/images/projects/tailwindmasterkit.png",
+    stack: [stack.nextjs, stack.tailwindcss, stack.typescript, stack.react],
+    link: "https://tailwindmasterkit.com",
+  },
+  {
+    title: "Box Shadows",
+    description:
+      "Copy and paste beautiful box shadows that stand out for your next project.",
+    image: "/images/projects/boxshadows.png",
+    stack: [stack.nextjs, stack.tailwindcss, stack.typescript, stack.react],
+    link: "https://manuarora.in/boxshadows",
+  },
+  {
+    title: "PlaceholderTech",
+    description:
+      "Your one-stop shop for web app needs tailored to your requirements.",
+    image: "/images/projects/placeholdertech.png",
+    stack: [stack.nextjs, stack.tailwindcss, stack.typescript, stack.react],
+    link: "https://placeholdertech.in",
+  },
+];
+
+================
+File: constants/stack.tsx
+================
+import {
+  TbBrandNextjs,
+  TbBrandReact,
+  TbBrandTailwind,
+  TbBrandTypescript,
+} from "react-icons/tb";
+
+export const stack = {
+  nextjs: {
+    name: "Next.js",
+    id: "nextjs",
+    icon: <TbBrandNextjs className="h-5 w-5 stroke-1" />,
+  },
+  tailwindcss: {
+    name: "Tailwind CSS",
+    id: "tailwindcss",
+    icon: <TbBrandTailwind className="h-5 w-5 stroke-1" />,
+  },
+  typescript: {
+    name: "Typescript",
+    id: "typescript",
+    icon: <TbBrandTypescript className="h-5 w-5 stroke-1" />,
+  },
+  react: {
+    name: "React",
+    id: "react",
+    icon: <TbBrandReact className="h-5 w-5 stroke-1" />,
+  },
+};
+
+================
+File: constants/timeline.ts
+================
+export const timeline = [
+  {
+    year: 2023,
+    points: [
+      "Building a new startup, this time it's going to be a big one",
+      "Started writing blogs as a daily habit. Won the nobel prize for literature",
+      "My brother went on to pursue a career in music, he's now a famous singer",
+    ],
+  },
+  {
+    year: 2022,
+    points: [
+      "Bought a new M2 chip macbook pro wow this is crazy!",
+      "Broke the chip as soon as I got it, had to buy a new one",
+      "Bought a new M2 chip macbook pro and started living on the streets.",
+    ],
+  },
+  {
+    year: 2021,
+    points: [
+      "Won the interstate merathon, died 4 times on the way.",
+      "Built a side project to help the people of my country win the war against covid",
+      "Started a podcast with my brother, we talk about the latest tech news",
+    ],
+  },
+  {
+    year: 2020,
+    points: [
+      "Back at it again, this time joined facebook as a software engineer",
+      "Went on to jump right in the metaverse, and joined Oculus as a software engineer",
+      "Champion of international tetris competition held between me and my brother",
+    ],
+  },
+  {
+    year: 2019,
+    points: [
+      "Mid life crisis and decided to change career",
+      "Went on to do a Masters in Data Science",
+      "Ended up owning a farm and a small business",
+    ],
+  },
+  {
+    year: 2018,
+    points: [
+      "Graduate with a Bachelor of Mathematics",
+      "Graduate with a Bachelor of Computer Science",
+      "Graduate with a Bachelor of Statistics",
+    ],
+  },
+];
+
+================
+File: constants/user.ts
+================
+export const user = {
+  github: "https://github.com/manuarora700",
+  twitter: "https://twitter.com/mannupaaji",
+  linkedin: "https://www.linkedin.com/in/manuarora28/",
+};
+
+================
+File: constants/uses.ts
+================
+export const uses = [
+  {
+    name: "16 Inch M2 MacBook Pro",
+    description: `My main machine for development that I've been using for over 6 months now. Such a beast of a machine. I love it.`,
+  },
+  {
+    name: "iPad Pro 12.9",
+    description: `Overrated in my opinion. I use it for reading books and watching movies. I don't use it for development.`,
+  },
+  {
+    name: "Keychron K2",
+    description:
+      "My main keyboard for development. I love the clicky keys and the compact size. I use it with a Logitech MX Master 3 mouse.",
+  },
+  {
+    name: "Logitech MX Master 3",
+    description:
+      "My main mouse for development. I love the scroll wheel and the thumb buttons. I use it with a Keychron K2 keyboard.",
+  },
+];
+
+================
+File: constants/workExperience.tsx
+================
+export const workExperience = [
+  {
+    company: "Apple",
+    role: "Senior Software Engineer",
+    startDate: "2021-01-01",
+    endDate: "2021-06-01",
+    description: [
+      "Worked on the Apple Music team",
+      "Increased the revenue of the company from $80 billion to $1 Trillion",
+      "Built a new feature that allowed users to listen to music while they were sleeping",
+    ],
+    location: "Cupertino, CA",
+    logo: "/images/logos/apple.png",
+  },
+  {
+    company: "Google",
+    role: "Software Engineer",
+    startDate: "2021-01-01",
+    endDate: "2021-06-01",
+    description: [
+      "Worked on the Google Maps team",
+      "Helped people get lost from point A to point B in shortest time",
+      "Worked directly with Dijkstra to build the shortest path algorithm - but better.",
+    ],
+    location: "Mountain View, CA",
+    logo: "/images/logos/google.png",
+  },
+  {
+    company: "Microsoft",
+    role: "Software Engineer",
+    startDate: "2021-01-01",
+    endDate: "2021-06-01",
+    description: [
+      "Worked on the Microsoft Teams team",
+      "Carefully crafted the tune that plays when you are on a call with your boss",
+      "Built a new feature that allowed users to mute their mic with a single click",
+    ],
+    location: "Redmond, WA",
+    logo: "/images/logos/microsoft.png",
+  },
+  {
+    company: "Netflix",
+    role: "Software Engineer Intern",
+    startDate: "2021-01-01",
+    endDate: "2021-06-01",
+    description: [
+      "Worked on the Netflix team",
+      "Broke the prod on the first day itself",
+      "Coined the term Netflix and Chill - which is now used by millions of people",
+    ],
+    location: "Los Gatos, CA",
+    logo: "/images/logos/netflix.png",
+  },
+];
+
+================
+File: lib/formatDate.ts
+================
+export function formatDate(dateString: string) {
+  return new Date(`${dateString}T00:00:00Z`).toLocaleDateString("en-US", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC",
+  });
+}
+
+================
+File: lib/generateRSSFeed.js
+================
+import ReactDOMServer from "react-dom/server";
+import { Feed } from "feed";
+import { mkdir, writeFile } from "fs/promises";
+
+import { getAllBlogs } from "./getAllBlogs";
+
+export async function generateRssFeed() {
+  let articles = await getAllBlogs();
+  let siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+  let author = {
+    name: "Your Name",
+    email: "yourname@youremail.com",
+  };
+
+  let feed = new Feed({
+    title: author.name,
+    description: "Your blog desc",
+    author,
+    id: siteUrl,
+    link: siteUrl,
+    image: `${siteUrl}/favicon.ico`,
+    favicon: `${siteUrl}/favicon.ico`,
+    copyright: `All rights reserved ${new Date().getFullYear()}`,
+    feedLinks: {
+      rss2: `${siteUrl}/rss/feed.xml`,
+      json: `${siteUrl}/rss/feed.json`,
+    },
+  });
+
+  for (let article of articles) {
+    let url = `${siteUrl}/articles/${article.slug}`;
+    let html = ReactDOMServer.renderToStaticMarkup(
+      <article.component isRssFeed />
+    );
+
+    feed.addItem({
+      title: article.title,
+      id: url,
+      link: url,
+      description: article.description,
+      content: html,
+      author: [author],
+      contributor: [author],
+      date: new Date(article.date),
+    });
+  }
+
+  await mkdir("./public/rss", { recursive: true });
+  await Promise.all([
+    writeFile("./public/rss/feed.xml", feed.rss2(), "utf8"),
+    writeFile("./public/rss/feed.json", feed.json1(), "utf8"),
+  ]);
+}
+
+================
+File: lib/getAllBlogs.ts
+================
+import glob from "fast-glob";
+import * as path from "path";
+
+async function importBlog(blogFileNames: any) {
+  let { meta, default: component } = await import(
+    `pages/blogs/${blogFileNames}`
+  );
+  return {
+    slug: blogFileNames.replace(/(\/index)?\.mdx$/, ""),
+    ...meta,
+    component,
+  };
+}
+
+export async function getAllBlogs() {
+  let blogFileNames = await glob(["*.mdx", "*/index.mdx"], {
+    cwd: path.join(process.cwd(), "pages/blogs"),
+  });
+
+  let blogs = await Promise.all(blogFileNames.map(importBlog));
+
+  return blogs.sort((a, b) => {
+    const dateA = new Date(a.date);
+    const dateB = new Date(b.date);
+    return dateB.getTime() - dateA.getTime();
+  });
+}
+
+================
+File: lib/github.ts
+================
+import { Repository } from "@/types/repos";
+import { Octokit } from "octokit";
+
+const octokit = new Octokit({
+  auth: process.env.GITHUB_PERSONAL_ACCESS_TOKEN,
+});
+
+const hasPAT = () => {
+  if (process.env.GITHUB_PERSONAL_ACCESS_TOKEN) {
+    return true;
+  }
+  return false;
+};
+
+export const getUserRepositories = async (username: string) => {
+  // get repositories of a user in decreasing order of stargazers
+
+  if (hasPAT()) {
+    try {
+      const { data } = await octokit.rest.repos.listForUser({
+        username,
+        direction: "desc",
+        per_page: 20,
+        visibility: "public",
+        public: true,
+        sort: "updated",
+        owner: username,
+      });
+
+      return data;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  } else {
+    try {
+      const res = await fetch(
+        `https://api.github.com/users/${username}/repos?per_page=20&sort=updated`
+      );
+      const data = await res.json();
+
+      return data;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  }
+};
+
+================
+File: pages/api/hello.ts
+================
+// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+import type { NextApiRequest, NextApiResponse } from 'next'
+
+type Data = {
+  name: string
+}
+
+export default function handler(
+  req: NextApiRequest,
+  res: NextApiResponse<Data>
+) {
+  res.status(200).json({ name: 'John Doe' })
+}
+
+================
+File: pages/blogs/what-is-a-blog-anyway/index.mdx
+================
+import { BlogLayout } from "@/components/BlogLayout";
+import banner from "./landing.webp";
+import Image from "next/image";
+
+export const meta = {
+  author: "Tyler Durden",
+  date: "2022-09-02",
+  title: "What is a blog anyway",
+  description:
+    "A blog is a website that is updated regularly with new content. It is a great way to share your thoughts and ideas with the world. In this blog post, we will discuss what a blog is and how to create one.",
+};
+
+export default (props) => <BlogLayout meta={meta} {...props} />;
+
+<Image src={banner} alt="" />
+
+Blogging has become an increasingly popular way to express yourself and share stories with the world. But what exactly is a blog? In this post, we’ll take a look at what a blog is and why it can be a great creative outlet for writers.
+
+## Introduction
+
+A blog (a truncation of "weblog") is a discussion or informational website published on the World Wide Web consisting of discrete, often informal diary-style text entries (posts). Posts are typically displayed in reverse chronological order, so that the most recent post appears first, at the top of the web page.
+
+Blogging can be immensely rewarding for writers. It provides an opportunity to share stories, hone writing skills, and connect with readers. It also allows writers to reach a wider audience and build a community of supporters.
+
+## Why Blogging is Fun
+
+Blogging can be an enjoyable creative outlet for writers to share their stories with the world. Whether it’s a personal account of daily life, a literary masterpiece, or a story told through multiple posts, blogging can be a great way to express yourself.
+
+It doesn’t have to be serious all the time either. A blog can also be used to make people laugh with amusing anecdotes or humorous observations. It’s also possible to write short and sweet posts that can still be effective in drawing readers in.
+
+## Tips for Blogging Success
+
+The key to successful blogging is providing meaningful content that readers can connect with. Write about topics you know and care about, and provide readers with valuable information. It’s also important to engage with readers by responding to comments, replying to emails, and following up on social media. Connecting with other bloggers who write about similar topics can help draw in new readers and build relationships with other writers.
+
+## Conclusion
+
+To recap, a blog is a discussion or informational website published on the World Wide Web consisting of discrete, often informal diary-style text entries (posts). Blogging provides writers with an opportunity to share stories, hone writing skills, and connect with readers. It also allows them to reach a wider audience and build a community of supporters.
+
+While blogging can be immensely rewarding, it’s important to remember to have fun with it. Writing should be enjoyable and entertaining, not a chore! With dedication and effort, blogging can be an effective way for writers to showcase their talent and reach new audiences.
+
+================
+File: pages/blogs/what-is-a-website-template/index.mdx
+================
+import { BlogLayout } from "@/components/BlogLayout";
+import banner from "./template.avif";
+import Image from "next/image";
+
+export const meta = {
+  author: "Manu Arora",
+  date: "2022-11-28",
+  title: "What is a website template",
+  description:
+    "A website template is a pre-designed website that can be customized to suit your needs. In this post, we’ll take a look at what a website template is and why it can be a great creative outlet for writers",
+};
+
+export default (props) => <BlogLayout meta={meta} {...props} />;
+
+<Image
+  src={banner}
+  alt=""
+  className="max-h-96 aspect-video object-cover object-left-top"
+/>
+
+Developers are always looking for the most efficient way to create a website. Website templates provide developers with a great solution for creating a website quickly and easily. In this guide, we will discuss what website templates are, how they benefit developers, how to benefit from them, how to make money from them, and examples of good website templates.
+
+## Introduction
+
+A website template is a pre-designed website layout used to quickly create a website. Templates provide developers with a starting point for creating a website and are great for those who are short on time or new to web development. Website templates are often more affordable than hiring a web designer and can be customized to fit the needs of the project.
+
+```javascript
+const template = `This is to show a code snippet`;
+
+export const ReactComponent = () => {
+  return <div>Here's how to write a component in MDX</div>;
+};
+```
+
+## How to Benefit from Templates
+
+Using website templates provides developers with an efficient way to create a website without having to start from scratch. Developers can customize the template by making changes to the code and adding their own features. Code snippets are small pieces of code that can be quickly added to a project to give it extra functionality. By using code snippets, developers can easily add features and customize the template without having to rewrite large chunks of code.
+
+## Making Money from Templates
+
+Selling templates is a great way for developers to make money and showcase their skills. Developers can create their own templates or purchase existing templates and resell them. There are many successful template shop businesses that have been created by developers over the years. These businesses often allow developers to make money by selling their own templates or by reselling existing ones.
+
+## Examples of Good Website Templates
+
+Popular website templates include WordPress, Joomla, and Drupal. These templates are often used by developers because they are easy to use and provide a wide range of features. When choosing a template, it’s important to consider factors such as cost, ease of use, and design flexibility. Customizing a website template can be done in many ways, but it’s important to ensure that you don’t break any of the existing code when making changes. It’s also important to ensure that your changes are compatible with other features of the template.
+
+## Conclusion
+
+Website templates provide developers with an efficient way to create a website without having to start from scratch. Templates are often more affordable than hiring a web designer and can be customized to fit the needs of the project. In this guide, we discussed what website templates are, how they benefit developers, how to benefit from them, how to make money from them, and examples of good website templates. We also discussed how to choose the right template and tips for customizing them.
+
+================
+File: pages/blogs/index.tsx
+================
+import Head from "next/head";
+
+import { formatDate } from "@/lib/formatDate";
+
+import { getAllBlogs } from "@/lib/getAllBlogs";
+import { Container } from "@/components/Container";
+import { AnimatePresence, motion } from "framer-motion";
+import { useState } from "react";
+import Link from "next/link";
+import AllBlogs from "@/components/AllBlogs";
+
+export default function BlogsPage({ blogs }: any) {
+  return (
+    <Container title={`Blogs | Tyler Durden`}>
+      <div className="max-w-5xl mx-auto px-8 mt-10 md:mt-20 relative ">
+        <div>
+          <h1 className="font-bold text-3xl md:text-5xl md:leading-tight text-zinc-50 max-w-3xl">
+            All of my
+            <span className="text-cyan-500"> Technical Knowledge</span> in one
+            place
+          </h1>
+          <p className="text-zinc-400 text-sm md:text-base max-w-2xl mt-8 md:leading-loose tracking-wide">
+            I'm obsessed with writing bad code. I'm also obsessed with writing.
+            Here, I write about my experiences with code and the things I've
+            learned along the way.
+          </p>
+        </div>
+        <div className="mt-20">
+          <AllBlogs blogs={blogs} />
+        </div>
+      </div>
+    </Container>
+  );
+}
+
+export async function getStaticProps() {
+  return {
+    props: {
+      blogs: (await getAllBlogs()).map(({ component, ...meta }) => meta),
+    },
+  };
+}
+
+================
+File: pages/_app.tsx
+================
+import "@/styles/globals.css";
+import type { AppProps } from "next/app";
+import { useEffect } from "react";
+
+import NProgress from "nprogress";
+import "nprogress/nprogress.css";
+import { useRouter } from "next/router";
+
+export default function App({ Component, pageProps }: AppProps) {
+  const router = useRouter();
+  useEffect(() => {
+    const handleStart = (url: string) => {
+      NProgress.start();
+    };
+    const handleStop = (url: string) => {
+      NProgress.done();
+    };
+
+    router.events.on("routeChangeStart", handleStart);
+    router.events.on("routeChangeComplete", handleStop);
+    router.events.on("routeChangeError", handleStop);
+
+    return () => {
+      router.events.off("routeChangeStart", handleStart);
+      router.events.off("routeChangeComplete", handleStop);
+      router.events.off("routeChangeError", handleStop);
+    };
+  }, [router]);
+  return <Component {...pageProps} />;
+}
+
+================
+File: pages/_document.tsx
+================
+import { Html, Head, Main, NextScript } from 'next/document'
+
+export default function Document() {
+  return (
+    <Html lang="en">
+      <Head />
+      <body>
+        <Main />
+        <NextScript />
+      </body>
+    </Html>
+  )
+}
+
+================
+File: pages/about.tsx
+================
+import { Container } from "@/components/Container";
+import { Projects } from "@/components/Projects";
+import { Timeline } from "@/components/Timeline";
+import { user } from "@/constants/user";
+import Image from "next/image";
+import {
+  AiOutlineGithub,
+  AiOutlineLinkedin,
+  AiOutlineTwitter,
+} from "react-icons/ai";
+
+export default function ProjectsPage() {
+  const socials = [
+    {
+      name: "twitter",
+      icon: (
+        <AiOutlineTwitter className="h-5 w-5 hover:text-primary transition duration-150" />
+      ),
+      link: user.twitter,
+    },
+    {
+      name: "LinkedIn",
+      icon: (
+        <AiOutlineLinkedin className="h-5 w-5 hover:text-primary transition duration-150" />
+      ),
+      link: user.linkedin,
+    },
+    {
+      name: "GitHub",
+      icon: (
+        <AiOutlineGithub className="h-5 w-5 hover:text-primary transition duration-150" />
+      ),
+      link: user.github,
+    },
+  ];
+  return (
+    <Container title={`Projects | Devpro`}>
+      <div className="max-w-5xl mx-auto px-8 md:mt-20 relative flex flex-col md:flex-row space-y-10 md:space-y-0 md:space-x-10 justify-between">
+        <div>
+          <h1 className="font-bold text-3xl md:text-5xl md:leading-tight text-zinc-50 max-w-3xl">
+            Hey! I'm
+            <span className="text-cyan-500"> Tyler Durden</span> and I'm a full
+            stack soap engineer.
+          </h1>
+          <p className="text-zinc-400 text-sm md:text-base max-w-2xl mt-8 md:leading-loose tracking-wide">
+            I've been obsessed with technology ever since I was a kid. When I
+            wasn't taking apart my family's computer (sorry, mom), I was
+            teaching myself how to code. Fast forward a few years, and now I'm a
+            full-fledged code ninja with an insatiable thirst for creating
+            beautiful websites and functional applications.
+          </p>
+        </div>
+
+        <div className="order-first md:order-last">
+          <Image
+            src={`/images/avatar.png`}
+            width={200}
+            height={200}
+            alt="Avatar"
+            className="rounded-2xl"
+          />
+          <div className="flex flex-row justify-start md:justify-center space-x-2 mt-2">
+            {socials.map((socialLink: any, idx: number) => (
+              <a
+                key={`footer-link-${idx}`}
+                href={socialLink.link}
+                className="text-zinc-500 text-sm relative"
+                target="__blank"
+              >
+                <span className="relative z-10 px-2 py-2 inline-block hover:text-cyan-500">
+                  {socialLink.icon}
+                </span>
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-5xl mx-auto px-8 mt-10 relative">
+        <p className="text-zinc-400 text-sm md:text-base mt-8 md:leading-loose tracking-wide">
+          When I'm not busy slaying bugs and writing code, I'm usually busy
+          indulging in my two favorite hobbies: hot sauce and dad jokes. I
+          firmly believe that a good laugh and a dash of hot sauce can fix just
+          about anything, including bugs in my code (okay, maybe not that last
+          part).
+        </p>
+        <p className="text-zinc-400 text-sm md:text-base mt-8 md:leading-loose tracking-wide">
+          Here's a timeline of what I've been upto
+        </p>
+        <Timeline />
+      </div>
+    </Container>
+  );
+}
+
+================
+File: pages/contributions.tsx
+================
+import Image from "next/image";
+import { Inter } from "next/font/google";
+import { Container } from "@/components/Container";
+import { Hero } from "@/components/Hero";
+import { Projects } from "@/components/Projects";
+import { getUserRepositories } from "@/lib/github";
+import { LatestRepos } from "@/components/LatestRepos";
+import { Repository } from "@/types/repos";
+import { user } from "@/constants/user";
+
+// const inter = Inter({ subsets: ["latin"] });
+
+export default function Contributions({ repos }: { repos: Repository[] }) {
+  return (
+    <Container title={`GitHub Contributions | Devpro`}>
+      <div className="max-w-5xl mx-auto px-8 mt-10 md:mt-20 relative">
+        <h1 className="font-bold text-3xl md:text-5xl md:leading-tight text-zinc-50 max-w-3xl">
+          Committing Code and Crimes Against{" "}
+          <span className="text-cyan-500">Open Source World</span>
+        </h1>
+        <p className="text-zinc-400 text-sm md:text-base max-w-2xl mt-8 md:leading-loose tracking-wide">
+          A place where you can witness my caffeinated coding adventures and see
+          just how much coffee it takes to fuel my commits. from my first "Hello
+          World" to my latest breakthrough, and everything in between.
+        </p>
+      </div>
+      <LatestRepos repos={repos} />
+
+      <div className="flex justify-center relative z-[70] ">
+        <a
+          href={user.github}
+          target="__blank"
+          className="text-zinc-200 border border-zinc-600 bg-zinc-900 px-8 py-2 rounded-lg hover:border-zinc-700 hover:bg-zinc-800/[0.8] transition duration-200"
+        >
+          View all on GitHub
+        </a>
+      </div>
+    </Container>
+  );
+}
+
+// get static props
+
+export async function getStaticProps() {
+  // const res = await fetch("https://api.github.com/users/tylerdurden");
+  // const data = await res.json();
+
+  const data = await getUserRepositories("manuarora700");
+
+  return {
+    props: {
+      repos: data,
+    },
+  };
+}
+
+================
+File: pages/events.tsx
+================
+import { Container } from "@/components/Container";
+import { Projects } from "@/components/Projects";
+import Talks from "@/components/Talks";
+import { talks } from "@/constants/events";
+import { useState } from "react";
+
+export default function EventsPge() {
+  return (
+    <Container title={`Events | Devpro`}>
+      <div className="max-w-5xl mx-auto px-8 mt-10 md:mt-20 relative">
+        <h1 className="font-bold text-3xl md:text-5xl md:leading-tight text-zinc-50 max-w-3xl">
+          I speak at conferences about how
+          <span className="text-cyan-500"> PHP is the best</span>
+        </h1>
+        <p className="text-zinc-400 text-sm md:text-base max-w-2xl mt-8 md:leading-loose tracking-wide">
+          I don't understand why people are after Angular and React when PHP is
+          still the OG of web development. I've been building a lot of things,
+          from small experiments to full-blown web applications, each project
+          showcases my love for coding and design.
+        </p>
+        <div className="mt-20 max-w-3xl mx-auto">
+          {talks.map((talk, idx) => (
+            <Talks
+              key={`talk-${idx}`}
+              title={talk.title}
+              description={talk.description}
+              company={talk.company}
+              image={talk.image}
+              url={talk.url}
+            />
+          ))}
+        </div>
+      </div>
+    </Container>
+  );
+}
+
+================
+File: pages/index.tsx
+================
+import { Container } from "@/components/Container";
+import { Hero } from "@/components/Hero";
+import { Projects } from "@/components/Projects";
+import { getUserRepositories } from "@/lib/github";
+import { LatestRepos } from "@/components/LatestRepos";
+import { Repository } from "@/types/repos";
+import { Experience } from "@/components/Experience";
+import { generateRssFeed } from "@/lib/generateRSSFeed";
+import { getAllBlogs } from "@/lib/getAllBlogs";
+import AllBlogs from "@/components/AllBlogs";
+import { Uses } from "@/components/Uses";
+
+// const inter = Inter({ subsets: ["latin"] });
+
+export default function Home({
+  repos,
+  blogs,
+}: {
+  repos: Repository[];
+  blogs: any;
+}) {
+  const shouldShowMore = () => {
+    if (repos && repos.length > 9) {
+      return true;
+    }
+    return false;
+  };
+  return (
+    <Container>
+      <Hero />
+      <Experience />
+      <h1 className="text-2xl md:text-3xl text-white font-bold max-w-5xl mx-auto px-8  mt-40">
+        I've been building a lot of things
+      </h1>
+
+      <Projects />
+      <h1 className="text-2xl md:text-3xl text-white font-bold max-w-5xl mx-auto px-8 mt-40">
+        Latest contributions to open source
+      </h1>
+      <LatestRepos repos={repos.slice(0, 9)} showMore={shouldShowMore()} />
+
+      <div className="max-w-5xl mx-auto px-8 grid grid-cols-1 lg:grid-cols-3 gap-10 mt-40 ">
+        <div className="col-span-2">
+          <AllBlogs blogs={blogs} />
+        </div>
+        <Uses />
+      </div>
+    </Container>
+  );
+}
+
+export async function getStaticProps() {
+  // FIXME: Add back the github api call
+  // const res = await fetch("https://api.github.com/users/tylerdurden");
+  // const data = await res.json();
+
+  // FIXME: Add back the rss feed generation
+
+  const data = await getUserRepositories("manuarora700");
+
+  return {
+    props: {
+      repos: data,
+      blogs: (await getAllBlogs())
+        .slice(0, 4)
+        .map(({ component, ...meta }) => meta),
+    },
+  };
+}
+
+================
+File: pages/projects.tsx
+================
+import { Container } from "@/components/Container";
+import { Projects } from "@/components/Projects";
+
+export default function ProjectsPage() {
+  return (
+    <Container title={`Projects | Devpro`}>
+      <div className="max-w-5xl mx-auto px-8 mt-10 md:mt-20 relative">
+        <h1 className="font-bold text-3xl md:text-5xl md:leading-tight text-zinc-50 max-w-3xl">
+          I've been building a
+          <span className="text-cyan-500"> lot of things</span>
+        </h1>
+        <p className="text-zinc-400 text-sm md:text-base max-w-2xl mt-8 md:leading-loose tracking-wide">
+          Come explore the fruits of my labor, from small experiments to
+          full-blown web applications, each project showcases my love for coding
+          and design.
+        </p>
+      </div>
+
+      <Projects />
+    </Container>
+  );
+}
+
+================
+File: public/rss/feed.json
+================
+{
+    "version": "https://jsonfeed.org/version/1",
+    "title": "Your Name",
+    "home_page_url": "https://devpro.aceternity.com",
+    "feed_url": "https://devpro.aceternity.com/rss/feed.json",
+    "description": "Your blog desc",
+    "icon": "https://devpro.aceternity.com/favicon.ico",
+    "author": {
+        "name": "Your Name"
+    },
+    "items": [
+        {
+            "id": "https://devpro.aceternity.com/articles/what-is-a-website-template",
+            "content_html": "hi",
+            "url": "https://devpro.aceternity.com/articles/what-is-a-website-template",
+            "title": "What is a website template",
+            "summary": "A website template is a pre-designed website that can be customized to suit your needs. In this post, we’ll take a look at what a website template is and why it can be a great creative outlet for writers",
+            "date_modified": "2022-11-28T00:00:00.000Z",
+            "author": {
+                "name": "Your Name"
+            }
+        },
+        {
+            "id": "https://devpro.aceternity.com/articles/what-is-a-blog-anyway",
+            "content_html": "hi",
+            "url": "https://devpro.aceternity.com/articles/what-is-a-blog-anyway",
+            "title": "What is a blog anyway",
+            "summary": "A blog is a website that is updated regularly with new content. It is a great way to share your thoughts and ideas with the world. In this blog post, we will discuss what a blog is and how to create one.",
+            "date_modified": "2022-09-02T00:00:00.000Z",
+            "author": {
+                "name": "Your Name"
+            }
+        }
+    ]
+}
+
+================
+File: public/rss/feed.xml
+================
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+    <channel>
+        <title>Your Name</title>
+        <link>https://devpro.aceternity.com</link>
+        <description>Your blog desc</description>
+        <lastBuildDate>Mon, 20 Mar 2023 10:49:40 GMT</lastBuildDate>
+        <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
+        <generator>https://github.com/jpmonette/feed</generator>
+        <image>
+            <title>Your Name</title>
+            <url>https://devpro.aceternity.com/favicon.ico</url>
+            <link>https://devpro.aceternity.com</link>
+        </image>
+        <copyright>All rights reserved 2023</copyright>
+        <item>
+            <title><![CDATA[What is a website template]]></title>
+            <link>https://devpro.aceternity.com/articles/what-is-a-website-template</link>
+            <guid>https://devpro.aceternity.com/articles/what-is-a-website-template</guid>
+            <pubDate>Mon, 28 Nov 2022 00:00:00 GMT</pubDate>
+            <description><![CDATA[A website template is a pre-designed website that can be customized to suit your needs. In this post, we’ll take a look at what a website template is and why it can be a great creative outlet for writers]]></description>
+            <content:encoded><![CDATA[hi]]></content:encoded>
+            <author>yourname@youremail.com (Your Name)</author>
+        </item>
+        <item>
+            <title><![CDATA[What is a blog anyway]]></title>
+            <link>https://devpro.aceternity.com/articles/what-is-a-blog-anyway</link>
+            <guid>https://devpro.aceternity.com/articles/what-is-a-blog-anyway</guid>
+            <pubDate>Fri, 02 Sep 2022 00:00:00 GMT</pubDate>
+            <description><![CDATA[A blog is a website that is updated regularly with new content. It is a great way to share your thoughts and ideas with the world. In this blog post, we will discuss what a blog is and how to create one.]]></description>
+            <content:encoded><![CDATA[hi]]></content:encoded>
+            <author>yourname@youremail.com (Your Name)</author>
+        </item>
+    </channel>
+</rss>
+
+================
+File: public/next.svg
+================
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 394 80"><path fill="#000" d="M262 0h68.5v12.7h-27.2v66.6h-13.6V12.7H262V0ZM149 0v12.7H94v20.4h44.3v12.6H94v21h55v12.6H80.5V0h68.7zm34.3 0h-17.8l63.8 79.4h17.9l-32-39.7 32-39.6h-17.9l-23 28.6-23-28.6zm18.3 56.7-9-11-27.1 33.7h17.8l18.3-22.7z"/><path fill="#000" d="M81 79.3 17 0H0v79.3h13.6V17l50.2 62.3H81Zm252.6-.4c-1 0-1.8-.4-2.5-1s-1.1-1.6-1.1-2.6.3-1.8 1-2.5 1.6-1 2.6-1 1.8.3 2.5 1a3.4 3.4 0 0 1 .6 4.3 3.7 3.7 0 0 1-3 1.8zm23.2-33.5h6v23.3c0 2.1-.4 4-1.3 5.5a9.1 9.1 0 0 1-3.8 3.5c-1.6.8-3.5 1.3-5.7 1.3-2 0-3.7-.4-5.3-1s-2.8-1.8-3.7-3.2c-.9-1.3-1.4-3-1.4-5h6c.1.8.3 1.6.7 2.2s1 1.2 1.6 1.5c.7.4 1.5.5 2.4.5 1 0 1.8-.2 2.4-.6a4 4 0 0 0 1.6-1.8c.3-.8.5-1.8.5-3V45.5zm30.9 9.1a4.4 4.4 0 0 0-2-3.3 7.5 7.5 0 0 0-4.3-1.1c-1.3 0-2.4.2-3.3.5-.9.4-1.6 1-2 1.6a3.5 3.5 0 0 0-.3 4c.3.5.7.9 1.3 1.2l1.8 1 2 .5 3.2.8c1.3.3 2.5.7 3.7 1.2a13 13 0 0 1 3.2 1.8 8.1 8.1 0 0 1 3 6.5c0 2-.5 3.7-1.5 5.1a10 10 0 0 1-4.4 3.5c-1.8.8-4.1 1.2-6.8 1.2-2.6 0-4.9-.4-6.8-1.2-2-.8-3.4-2-4.5-3.5a10 10 0 0 1-1.7-5.6h6a5 5 0 0 0 3.5 4.6c1 .4 2.2.6 3.4.6 1.3 0 2.5-.2 3.5-.6 1-.4 1.8-1 2.4-1.7a4 4 0 0 0 .8-2.4c0-.9-.2-1.6-.7-2.2a11 11 0 0 0-2.1-1.4l-3.2-1-3.8-1c-2.8-.7-5-1.7-6.6-3.2a7.2 7.2 0 0 1-2.4-5.7 8 8 0 0 1 1.7-5 10 10 0 0 1 4.3-3.5c2-.8 4-1.2 6.4-1.2 2.3 0 4.4.4 6.2 1.2 1.8.8 3.2 2 4.3 3.4 1 1.4 1.5 3 1.5 5h-5.8z"/></svg>
+
+================
+File: public/thirteen.svg
+================
+<svg xmlns="http://www.w3.org/2000/svg" width="40" height="31" fill="none"><g opacity=".9"><path fill="url(#a)" d="M13 .4v29.3H7V6.3h-.2L0 10.5V5L7.2.4H13Z"/><path fill="url(#b)" d="M28.8 30.1c-2.2 0-4-.3-5.7-1-1.7-.8-3-1.8-4-3.1a7.7 7.7 0 0 1-1.4-4.6h6.2c0 .8.3 1.4.7 2 .4.5 1 .9 1.7 1.2.7.3 1.6.4 2.5.4 1 0 1.7-.2 2.5-.5.7-.3 1.3-.8 1.7-1.4.4-.6.6-1.2.6-2s-.2-1.5-.7-2.1c-.4-.6-1-1-1.8-1.4-.8-.4-1.8-.5-2.9-.5h-2.7v-4.6h2.7a6 6 0 0 0 2.5-.5 4 4 0 0 0 1.7-1.3c.4-.6.6-1.3.6-2a3.5 3.5 0 0 0-2-3.3 5.6 5.6 0 0 0-4.5 0 4 4 0 0 0-1.7 1.2c-.4.6-.6 1.2-.6 2h-6c0-1.7.6-3.2 1.5-4.5 1-1.3 2.2-2.3 3.8-3C25 .4 26.8 0 28.8 0s3.8.4 5.3 1.1c1.5.7 2.7 1.7 3.6 3a7.2 7.2 0 0 1 1.2 4.2c0 1.6-.5 3-1.5 4a7 7 0 0 1-4 2.2v.2c2.2.3 3.8 1 5 2.2a6.4 6.4 0 0 1 1.6 4.6c0 1.7-.5 3.1-1.4 4.4a9.7 9.7 0 0 1-4 3.1c-1.7.8-3.7 1.1-5.8 1.1Z"/></g><defs><linearGradient id="a" x1="20" x2="20" y1="0" y2="30.1" gradientUnits="userSpaceOnUse"><stop/><stop offset="1" stop-color="#3D3D3D"/></linearGradient><linearGradient id="b" x1="20" x2="20" y1="0" y2="30.1" gradientUnits="userSpaceOnUse"><stop/><stop offset="1" stop-color="#3D3D3D"/></linearGradient></defs></svg>
+
+================
+File: public/vercel.svg
+================
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 283 64"><path fill="black" d="M141 16c-11 0-19 7-19 18s9 18 20 18c7 0 13-3 16-7l-7-5c-2 3-6 4-9 4-5 0-9-3-10-7h28v-3c0-11-8-18-19-18zm-9 15c1-4 4-7 9-7s8 3 9 7h-18zm117-15c-11 0-19 7-19 18s9 18 20 18c6 0 12-3 16-7l-8-5c-2 3-5 4-8 4-5 0-9-3-11-7h28l1-3c0-11-8-18-19-18zm-10 15c2-4 5-7 10-7s8 3 9 7h-19zm-39 3c0 6 4 10 10 10 4 0 7-2 9-5l8 5c-3 5-9 8-17 8-11 0-19-7-19-18s8-18 19-18c8 0 14 3 17 8l-8 5c-2-3-5-5-9-5-6 0-10 4-10 10zm83-29v46h-9V5h9zM37 0l37 64H0L37 0zm92 5-27 48L74 5h10l18 30 17-30h10zm59 12v10l-3-1c-6 0-10 4-10 10v15h-9V17h9v9c0-5 6-9 13-9z"/></svg>
+
+================
+File: styles/globals.css
+================
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+  font-family: "Inter", sans-serif;
+  scroll-behavior: smooth;
+}
+
+================
+File: types/repos.ts
+================
+export type Repository = {
+  id: number;
+  node_id: string;
+  name: string;
+  full_name: string;
+  private: boolean;
+  owner: {
+    login: string;
+    id: number;
+    node_id: string;
+    avatar_url: string;
+  };
+  html_url: string;
+  description: string;
+  forks_count: boolean;
+  url: string;
+  forks_url: string;
+  keys_url: string;
+  collaborators_url: string;
+  stargazers_count: number;
+};
+
+================
+File: util/truncateText.ts
+================
+export const truncateText = (text: string, length: number) => {
+  if (text && text.length <= length) {
+    return text;
+  }
+  return text && text.substring(0, length) + "...";
+};
+
+================
+File: .env.example
+================
+GITHUB_PERSONAL_ACCESS_TOKEN = YOUR_TOKEN_HERE
+NEXT_PUBLIC_SITE_URL = YOUR_PRODUCTION_WEBSITE_LINK_HERE
+
+================
+File: .gitignore
+================
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# local env files
+.env*.local
+.env
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+================
+File: documentation.md
+================
+## Devpro Documentation
+
+To install the project
+
+`npm install`
+
+after installing the dependencies
+
+`npm run dev`.
+
+## For GitHub repositories
+
+To fetch your latest repositories from GitHub, you need to create a GitHub Personal Access token. You can create a token by following the steps below:
+
+1. Go to your GitHub account settings
+2. Click on Developer settings
+3. Click on Personal access tokens
+4. Click on Generate new token
+5. Give the token a name and select the scopes you want to give to the token
+6. Click on Generate token
+7. Copy the token and paste it in the .env file (an example already exists as `.env.example`. Create another file called `.env` and paste in the personal access token)
+
+## Reachout
+
+In case of any issues, you can reach out to me on [Twitter](https://twitter.com/mannupaaji) or my email address: aceternitysolutions@gmail.cpom
+
+================
+File: next.config.mjs
+================
+/** @type {import('next').NextConfig} */
+import nextMDX from "@next/mdx";
+import remarkGfm from "remark-gfm";
+import rehypePrism from "@mapbox/rehype-prism";
+
+const nextConfig = {
+  pageExtensions: ["tsx", "mdx"],
+  reactStrictMode: true,
+  images: {
+    domains: [
+      "api.microlink.io", // Microlink Image Preview
+      "avatars.githubusercontent.com", // GitHub avatars
+    ],
+  },
+  experimental: {
+    newNextLinkBehavior: true,
+    scrollRestoration: true,
+  },
+};
+
+const withMDX = nextMDX({
+  extension: /\.mdx?$/,
+  options: {
+    remarkPlugins: [remarkGfm],
+    rehypePlugins: [rehypePrism],
+  },
+});
+
+export default withMDX(nextConfig);
+
+================
+File: package.json
+================
+{
+  "name": "next-tailwind-landing-boilerplate",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@headlessui/react": "^1.7.13",
+    "@mapbox/rehype-prism": "^0.8.0",
+    "@mdx-js/loader": "^2.3.0",
+    "@mdx-js/react": "^2.3.0",
+    "@next/mdx": "^13.2.4",
+    "@tailwindcss/forms": "^0.5.3",
+    "@tailwindcss/line-clamp": "^0.4.2",
+    "@tailwindcss/typography": "^0.5.9",
+    "@types/node": "18.15.3",
+    "@types/nprogress": "^0.2.0",
+    "@types/react": "18.0.28",
+    "@types/react-dom": "18.0.11",
+    "autoprefixer": "10.4.14",
+    "clsx": "^1.2.1",
+    "feed": "^4.2.2",
+    "framer-motion": "^10.6.0",
+    "mini-svg-data-uri": "^1.4.4",
+    "moment": "^2.29.4",
+    "next": "13.2.4",
+    "nprogress": "^0.2.0",
+    "octokit": "^2.0.14",
+    "postcss": "8.4.21",
+    "qss": "^3.0.0",
+    "radix-ui": "^1.0.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-icons": "^4.8.0",
+    "remark-gfm": "^3.0.1",
+    "tailwind-merge": "^1.10.0",
+    "tailwindcss": "3.2.7",
+    "typescript": "5.0.2"
+  }
+}
+
+================
+File: postcss.config.js
+================
+module.exports = {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
+}
+
+================
+File: readme.md
+================
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+
+## Getting Started
+
+First, run the development server:
+
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+
+[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+
+The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+
+This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+
+## Learn More
+
+To learn more about Next.js, take a look at the following resources:
+
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+================
+File: tailwind.config.js
+================
+/** @type {import('tailwindcss').Config} */
+
+const svgToDataUri = require("mini-svg-data-uri");
+const {
+  default: flattenColorPalette,
+} = require("tailwindcss/lib/util/flattenColorPalette");
+
+module.exports = {
+  content: [
+    "./pages/**/*.{js,ts,jsx,tsx}",
+    "./components/**/*.{js,ts,jsx,tsx}",
+    "./app/**/*.{js,ts,jsx,tsx}",
+  ],
+  theme: {
+    extend: {
+      backgroundImage: {
+        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
+        "gradient-conic":
+          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+      },
+      typography: (theme) => ({
+        invert: {
+          css: {
+            "--tw-prose-body": "var(--tw-prose-invert-body)",
+            "--tw-prose-headings": "var(--tw-prose-invert-headings)",
+            "--tw-prose-links": "var(--tw-prose-invert-links)",
+            "--tw-prose-links-hover": "var(--tw-prose-invert-links-hover)",
+            "--tw-prose-underline": "var(--tw-prose-invert-underline)",
+            "--tw-prose-underline-hover":
+              "var(--tw-prose-invert-underline-hover)",
+            "--tw-prose-bold": "var(--tw-prose-invert-bold)",
+            "--tw-prose-counters": "var(--tw-prose-invert-counters)",
+            "--tw-prose-bullets": "var(--tw-prose-invert-bullets)",
+            "--tw-prose-hr": "var(--tw-prose-invert-hr)",
+            "--tw-prose-quote-borders": "var(--tw-prose-invert-quote-borders)",
+            "--tw-prose-captions": "var(--tw-prose-invert-captions)",
+            "--tw-prose-code": "var(--tw-prose-invert-code)",
+            "--tw-prose-code-bg": "var(--tw-prose-invert-code-bg)",
+            "--tw-prose-pre-code": "var(--tw-prose-invert-pre-code)",
+            "--tw-prose-pre-bg": "var(--tw-prose-invert-pre-bg)",
+            "--tw-prose-pre-border": "var(--tw-prose-invert-pre-border)",
+            "--tw-prose-th-borders": "var(--tw-prose-invert-th-borders)",
+            "--tw-prose-td-borders": "var(--tw-prose-invert-td-borders)",
+          },
+        },
+        DEFAULT: {
+          css: {
+            "--tw-prose-body": theme("colors.zinc.600"),
+            "--tw-prose-headings": theme("colors.zinc.900"),
+            "--tw-prose-links": theme("colors.teal.500"),
+            "--tw-prose-links-hover": theme("colors.teal.600"),
+            "--tw-prose-underline": theme("colors.teal.500 / 0.2"),
+            "--tw-prose-underline-hover": theme("colors.teal.500"),
+            "--tw-prose-bold": theme("colors.zinc.900"),
+            "--tw-prose-counters": theme("colors.zinc.900"),
+            "--tw-prose-bullets": theme("colors.zinc.900"),
+            "--tw-prose-hr": theme("colors.zinc.100"),
+            "--tw-prose-quote-borders": theme("colors.zinc.200"),
+            "--tw-prose-captions": theme("colors.zinc.400"),
+            "--tw-prose-code": theme("colors.zinc.700"),
+            "--tw-prose-code-bg": theme("colors.zinc.300 / 0.2"),
+            "--tw-prose-pre-code": theme("colors.zinc.100"),
+            "--tw-prose-pre-bg": theme("colors.zinc.900"),
+            "--tw-prose-pre-border": "transparent",
+            "--tw-prose-th-borders": theme("colors.zinc.200"),
+            "--tw-prose-td-borders": theme("colors.zinc.100"),
+
+            "--tw-prose-invert-body": theme("colors.zinc.400"),
+            "--tw-prose-invert-headings": theme("colors.zinc.200"),
+            "--tw-prose-invert-links": theme("colors.teal.400"),
+            "--tw-prose-invert-links-hover": theme("colors.teal.400"),
+            "--tw-prose-invert-underline": theme("colors.teal.400 / 0.3"),
+            "--tw-prose-invert-underline-hover": theme("colors.teal.400"),
+            "--tw-prose-invert-bold": theme("colors.zinc.200"),
+            "--tw-prose-invert-counters": theme("colors.zinc.200"),
+            "--tw-prose-invert-bullets": theme("colors.zinc.200"),
+            "--tw-prose-invert-hr": theme("colors.zinc.700 / 0.4"),
+            "--tw-prose-invert-quote-borders": theme("colors.zinc.500"),
+            "--tw-prose-invert-captions": theme("colors.zinc.500"),
+            "--tw-prose-invert-code": theme("colors.zinc.300"),
+            "--tw-prose-invert-code-bg": theme("colors.zinc.200 / 0.05"),
+            "--tw-prose-invert-pre-code": theme("colors.zinc.100"),
+            "--tw-prose-invert-pre-bg": "rgb(0 0 0 / 0.4)",
+            "--tw-prose-invert-pre-border": theme("colors.zinc.200 / 0.1"),
+            "--tw-prose-invert-th-borders": theme("colors.zinc.700"),
+            "--tw-prose-invert-td-borders": theme("colors.zinc.800"),
+
+            // Base
+            color: "var(--tw-prose-body)",
+            lineHeight: theme("lineHeight.7"),
+            "> *": {
+              marginTop: theme("spacing.10"),
+              marginBottom: theme("spacing.10"),
+            },
+            p: {
+              marginTop: theme("spacing.7"),
+              marginBottom: theme("spacing.7"),
+            },
+
+            // Headings
+            "h2, h3": {
+              color: "var(--tw-prose-headings)",
+              fontWeight: theme("fontWeight.semibold"),
+            },
+            h2: {
+              fontSize: theme("fontSize.xl")[0],
+              lineHeight: theme("lineHeight.7"),
+              marginTop: theme("spacing.20"),
+              marginBottom: theme("spacing.4"),
+            },
+            h3: {
+              fontSize: theme("fontSize.base")[0],
+              lineHeight: theme("lineHeight.7"),
+              marginTop: theme("spacing.16"),
+              marginBottom: theme("spacing.4"),
+            },
+            ":is(h2, h3) + *": {
+              marginTop: 0,
+            },
+
+            // Images
+            img: {
+              borderRadius: theme("borderRadius.3xl"),
+            },
+
+            // Inline elements
+            a: {
+              color: "var(--tw-prose-links)",
+              fontWeight: theme("fontWeight.semibold"),
+              textDecoration: "underline",
+              textDecorationColor: "var(--tw-prose-underline)",
+              transitionProperty: "color, text-decoration-color",
+              transitionDuration: theme("transitionDuration.150"),
+              transitionTimingFunction: theme(
+                "transitionTimingFunction.in-out"
+              ),
+            },
+            "a:hover": {
+              color: "var(--tw-prose-links-hover)",
+              textDecorationColor: "var(--tw-prose-underline-hover)",
+            },
+            strong: {
+              color: "var(--tw-prose-bold)",
+              fontWeight: theme("fontWeight.semibold"),
+            },
+            code: {
+              display: "inline-block",
+              color: "var(--tw-prose-code)",
+              fontSize: theme("fontSize.sm")[0],
+              fontWeight: theme("fontWeight.semibold"),
+              backgroundColor: "var(--tw-prose-code-bg)",
+              borderRadius: theme("borderRadius.lg"),
+              paddingLeft: theme("spacing.1"),
+              paddingRight: theme("spacing.1"),
+            },
+            "a code": {
+              color: "inherit",
+            },
+            ":is(h2, h3) code": {
+              fontWeight: theme("fontWeight.bold"),
+            },
+
+            // Quotes
+            blockquote: {
+              paddingLeft: theme("spacing.6"),
+              borderLeftWidth: theme("borderWidth.2"),
+              borderLeftColor: "var(--tw-prose-quote-borders)",
+              fontStyle: "italic",
+            },
+
+            // Figures
+            figcaption: {
+              color: "var(--tw-prose-captions)",
+              fontSize: theme("fontSize.sm")[0],
+              lineHeight: theme("lineHeight.6"),
+              marginTop: theme("spacing.3"),
+            },
+            "figcaption > p": {
+              margin: 0,
+            },
+
+            // Lists
+            ul: {
+              listStyleType: "disc",
+            },
+            ol: {
+              listStyleType: "decimal",
+            },
+            "ul, ol": {
+              paddingLeft: theme("spacing.6"),
+            },
+            li: {
+              marginTop: theme("spacing.6"),
+              marginBottom: theme("spacing.6"),
+              paddingLeft: theme("spacing[3.5]"),
+            },
+            "li::marker": {
+              fontSize: theme("fontSize.sm")[0],
+              fontWeight: theme("fontWeight.semibold"),
+            },
+            "ol > li::marker": {
+              color: "var(--tw-prose-counters)",
+            },
+            "ul > li::marker": {
+              color: "var(--tw-prose-bullets)",
+            },
+            "li :is(ol, ul)": {
+              marginTop: theme("spacing.4"),
+              marginBottom: theme("spacing.4"),
+            },
+            "li :is(li, p)": {
+              marginTop: theme("spacing.3"),
+              marginBottom: theme("spacing.3"),
+            },
+
+            // Code blocks
+            pre: {
+              color: "var(--tw-prose-pre-code)",
+              fontSize: theme("fontSize.sm")[0],
+              fontWeight: theme("fontWeight.medium"),
+              backgroundColor: "var(--tw-prose-pre-bg)",
+              borderRadius: theme("borderRadius.3xl"),
+              padding: theme("spacing.8"),
+              overflowX: "auto",
+              border: "1px solid",
+              borderColor: "var(--tw-prose-pre-border)",
+            },
+            "pre code": {
+              display: "inline",
+              color: "inherit",
+              fontSize: "inherit",
+              fontWeight: "inherit",
+              backgroundColor: "transparent",
+              borderRadius: 0,
+              padding: 0,
+            },
+
+            // Horizontal rules
+            hr: {
+              marginTop: theme("spacing.20"),
+              marginBottom: theme("spacing.20"),
+              borderTopWidth: "1px",
+              borderColor: "var(--tw-prose-hr)",
+              "@screen lg": {
+                marginLeft: `calc(${theme("spacing.12")} * -1)`,
+                marginRight: `calc(${theme("spacing.12")} * -1)`,
+              },
+            },
+
+            // Tables
+            table: {
+              width: "100%",
+              tableLayout: "auto",
+              textAlign: "left",
+              fontSize: theme("fontSize.sm")[0],
+            },
+            thead: {
+              borderBottomWidth: "1px",
+              borderBottomColor: "var(--tw-prose-th-borders)",
+            },
+            "thead th": {
+              color: "var(--tw-prose-headings)",
+              fontWeight: theme("fontWeight.semibold"),
+              verticalAlign: "bottom",
+              paddingBottom: theme("spacing.2"),
+            },
+            "thead th:not(:first-child)": {
+              paddingLeft: theme("spacing.2"),
+            },
+            "thead th:not(:last-child)": {
+              paddingRight: theme("spacing.2"),
+            },
+            "tbody tr": {
+              borderBottomWidth: "1px",
+              borderBottomColor: "var(--tw-prose-td-borders)",
+            },
+            "tbody tr:last-child": {
+              borderBottomWidth: 0,
+            },
+            "tbody td": {
+              verticalAlign: "baseline",
+            },
+            tfoot: {
+              borderTopWidth: "1px",
+              borderTopColor: "var(--tw-prose-th-borders)",
+            },
+            "tfoot td": {
+              verticalAlign: "top",
+            },
+            ":is(tbody, tfoot) td": {
+              paddingTop: theme("spacing.2"),
+              paddingBottom: theme("spacing.2"),
+            },
+            ":is(tbody, tfoot) td:not(:first-child)": {
+              paddingLeft: theme("spacing.2"),
+            },
+            ":is(tbody, tfoot) td:not(:last-child)": {
+              paddingRight: theme("spacing.2"),
+            },
+          },
+        },
+      }),
+    },
+  },
+  plugins: [
+    require("@tailwindcss/forms"),
+    require("@tailwindcss/line-clamp"),
+    require("@tailwindcss/typography"),
+    function ({ matchUtilities, theme }) {
+      matchUtilities(
+        {
+          "bg-grid": (value) => ({
+            backgroundImage: `url("${svgToDataUri(
+              `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="${value}"><path d="M0 .5H31.5V32"/></svg>`
+            )}")`,
+          }),
+          "bg-dot": (value) => ({
+            backgroundImage: `url("${svgToDataUri(
+              `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="16" height="16" fill="none"><circle fill="${value}" id="pattern-circle" cx="10" cy="10" r="1.6257413380501518"></circle></svg>`
+            )}")`,
+          }),
+          "bg-grid-large": (value) => ({
+            backgroundImage: `url("${svgToDataUri(
+              `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="64" height="64" fill="none" stroke="${value}" stroke-width="0.5"><path d="M0 .5H31.5V32"/></svg>`
+            )}")`,
+          }),
+          "bg-grid-extrasmall": (value) => ({
+            backgroundImage: `url("${svgToDataUri(
+              `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="8" height="8" fill="none" stroke="${value}"><path d="M0 .5H31.5V32"/></svg>`
+            )}")`,
+          }),
+        },
+        {
+          values: flattenColorPalette(theme("backgroundColor")),
+          type: "color",
+        }
+      );
+    },
+  ],
+};
+
+================
+File: tsconfig.json
+================
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "paths": {
+      "@/*": ["./*"]
+    }
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules"]
+}
+
+
+
+================================================================
+End of Codebase
+================================================================
