@@ -70,7 +70,7 @@ export default function BlogsPage({ blogs }: any) {
           
           <div className="md:w-1/3 space-y-8">
             {/* Categories section */}
-            <div className="bg-zinc-100 dark:bg-zinc-800/50 rounded-xl p-6">
+            <div className="bg-white dark:bg-zinc-800/50 rounded-xl p-6">
               <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 mb-4">Categories</h2>
               <div className="flex flex-col gap-2">
                 {allCategories.map((category: string) => (
@@ -90,7 +90,7 @@ export default function BlogsPage({ blogs }: any) {
             </div>
             
             {/* Popular tags section */}
-            <div className="bg-zinc-100 dark:bg-zinc-800/50 rounded-xl p-6">
+            <div className="bg-white dark:bg-zinc-800/50 rounded-xl p-6">
               <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 mb-4">Popular Tags</h2>
               <div className="flex flex-wrap gap-2">
                 {popularTags.map((tag: string) => (
