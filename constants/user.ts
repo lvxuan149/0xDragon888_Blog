@@ -1,5 +1,5 @@
 export const user = {
-  github: "https://github.com/manuarora700",
-  twitter: "https://twitter.com/mannupaaji",
-  linkedin: "https://www.linkedin.com/in/manuarora28/",
+  github: "https://github.com/lvxuan149",
+  twitter: "https://x.com/lvxuan147",
+  linkedin: "https://www.linkedin.com/in/0xdragon888",
 };

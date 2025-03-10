@@ -9,6 +9,10 @@ async function importBlog(blogFileNames: string) {
   let { meta, default: component } = await import(
     `pages/blogs/${blogFileNames}`
   );
+  
+  // 确保 meta 包含 banner
+  console.log('Blog meta:', meta); // 添加调试日志
+  
   return {
     slug: blogFileNames.replace(/(\/index)?\.mdx$/, ""),
     ...meta,

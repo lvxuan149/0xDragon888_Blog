@@ -52,11 +52,11 @@ export default function BlogsPage({ blogs }: any) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 md:mt-20 relative">
         <div>
           <h1 className="font-bold text-3xl md:text-5xl md:leading-tight max-w-3xl">
-            <span className="text-white">All of my</span>
-            <span className="text-primary-900"> Technical Knowledge</span>
-            <span className="text-white"> in one place</span>
+            <span className="text-zinc-900 dark:text-white">All of my</span>
+            <span className="text-primary-900 dark:text-primary-900"> Technical Knowledge</span>
+            <span className="text-zinc-900 dark:text-white"> in one place</span>
           </h1>
-          <p className="text-zinc-400 text-sm md:text-base max-w-2xl mt-8 md:leading-loose tracking-wide">
+          <p className="text-zinc-600 dark:text-zinc-400 text-sm md:text-base max-w-2xl mt-8 md:leading-loose tracking-wide">
             I'm obsessed with writing bad code. I'm also obsessed with writing.
             Here, I write about my experiences with code and the things I've
             learned along the way.
@@ -64,22 +64,20 @@ export default function BlogsPage({ blogs }: any) {
         </div>
         
         <div className="mt-20 flex flex-col md:flex-row gap-10">
-          {/* Main content - blog list */}
           <div className="md:w-2/3">
             <AllBlogs blogs={blogs} />
           </div>
           
-          {/* Sidebar */}
           <div className="md:w-1/3 space-y-8">
             {/* Categories section */}
-            <div className="bg-zinc-800/50 rounded-xl p-6">
-              <h2 className="text-xl font-bold text-zinc-100 mb-4">Categories</h2>
+            <div className="bg-zinc-100 dark:bg-zinc-800/50 rounded-xl p-6">
+              <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 mb-4">Categories</h2>
               <div className="flex flex-col gap-2">
                 {allCategories.map((category: string) => (
                   <div key={category} className="flex items-center justify-between">
                     <Link 
                       href={`/blogs?category=${encodeURIComponent(category)}`}
-                      className="px-3 py-1 bg-zinc-700/70 hover:bg-primary-900/20 text-zinc-300 hover:text-primary-700 rounded-full text-sm transition-colors"
+                      className="px-3 py-1 bg-zinc-200 dark:bg-zinc-700/70 hover:bg-primary-100 dark:hover:bg-primary-900/20 text-zinc-700 dark:text-zinc-300 hover:text-primary-600 dark:hover:text-primary-400 rounded-full text-sm transition-colors"
                     >
                       {category}
                       <span className="text-zinc-500 ml-1">
@@ -92,14 +90,14 @@ export default function BlogsPage({ blogs }: any) {
             </div>
             
             {/* Popular tags section */}
-            <div className="bg-zinc-800/50 rounded-xl p-6">
-              <h2 className="text-xl font-bold text-zinc-100 mb-4">Popular Tags</h2>
+            <div className="bg-zinc-100 dark:bg-zinc-800/50 rounded-xl p-6">
+              <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 mb-4">Popular Tags</h2>
               <div className="flex flex-wrap gap-2">
                 {popularTags.map((tag: string) => (
                   <Link 
                     key={tag}
                     href={`/blogs?tag=${encodeURIComponent(tag)}`}
-                    className="px-3 py-1 bg-zinc-700/70 hover:bg-primary-900/20 text-zinc-300 hover:text-primary-700 rounded-full text-sm transition-colors"
+                    className="px-3 py-1 bg-zinc-200 dark:bg-zinc-700/70 hover:bg-primary-100 dark:hover:bg-primary-900/20 text-zinc-700 dark:text-zinc-300 hover:text-primary-600 dark:hover:text-primary-400 rounded-full text-sm transition-colors"
                   >
                     {tag} <span className="text-zinc-500">({tagCounts[tag]})</span>
                   </Link>
@@ -114,9 +112,12 @@ export default function BlogsPage({ blogs }: any) {
 }
 
 export async function getStaticProps() {
+  const blogs = await getAllBlogs();
+  console.log('Available blogs:', blogs.length); // 添加日志以验证博客数量
+  
   return {
     props: {
-      blogs: (await getAllBlogs()).map(({ component, ...meta }) => meta),
+      blogs: blogs.map(({ component, ...meta }) => meta),
     },
   };
 }

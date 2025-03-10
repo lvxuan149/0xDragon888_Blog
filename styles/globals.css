@@ -3,29 +3,20 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-  --timeline-color: #3a4aff;  /* 使用 primary.600 的颜色，更深邃的蓝色 */
+  --timeline-color: #3a4aff;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-    --timeline-color: #374151;  /* 使用更深的灰色，更适合暗色主题 */
-  }
+:root[class~="dark"] {
+  --timeline-color: #374151;
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
   font-family: "Inter", sans-serif;
   scroll-behavior: smooth;
+  @apply bg-white text-zinc-900;  /* 设置默认浅色主题 */
+}
+
+/* 暗色模式样式 */
+.dark body {
+  @apply bg-zinc-900 text-zinc-100;
 }

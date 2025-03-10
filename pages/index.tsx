@@ -7,6 +7,7 @@ import { Repository } from "@/types/repos";
 import { generateRssFeed } from "@/lib/generateRSSFeed";
 import { getAllBlogs } from "@/lib/getAllBlogs";
 import AllBlogs from "@/components/AllBlogs";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 // const inter = Inter({ subsets: ["latin"] });
 

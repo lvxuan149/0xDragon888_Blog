@@ -1,0 +1,125 @@
+import { BlogLayout } from "@/components/BlogLayout";
+import banner from "./blog-start.png";
+import Image from "next/image";
+
+export const meta = {
+  author: "0xDragon888",
+  date: "2024-09-18",
+  title: "配置0xDragon888博客",
+  description: "这个博客的初衷是打造一个好用的知识管理工具，帮助构建和管理个人知识体系。通过分类、标签和归档等功能，实现高效的知识管理。",
+  categories: ["Blog"],
+  tags: ["Knowledge Management", "next.js", "Git", "Github", "Markdown", "mdx"],
+  banner: banner  // 直接导出 banner 对象，而不是 {src, height, width}
+};
+
+export default (props) => <BlogLayout meta={meta} {...props} />;
+
+<Image
+  src={banner}
+  alt="博客配置封面"
+  className="max-h-96 aspect-video object-cover object-left-top"
+/>
+
+# 配置0xDragon888博客
+
+## 0.背景
+
+这个博客页的初衷是打造一个好用技术，编程相关的`知识库`。
+
+对于我来说，繁杂的编程技术，工程体系难免会有遗忘的地方，如果有一个方便好用的知识管理库，可以帮助我们很好的构建知识，并能够快速地把遗忘的知识点找回来，那就太棒了！
+
+## 1.工具
+
+### MDX 博客系统
+
+#### 1. 创建新博客
+
+- 在`pages/blogs`目录下创建新的MDX文件
+- 文件命名遵循`YYYY-MM-DD-slug.mdx`格式
+- 包含必要的元数据：
+
+
+#### 2. 图片资源管理
+
+- 将图片放置在博客目录下的`images`文件夹
+- 使用Next.js的Image组件优化图片加载
+- 示例：
+
+```jsx
+import Image from 'next/image';
+import banner from './images/banner.png';
+
+<Image
+  src={banner}
+  alt="描述文字"
+  width={800}
+  height={400}
+/>
+```
+
+#### 3. 版本控制
+
+- 使用Git进行版本管理
+- 标准操作流程：
+
+```bash
+git add .
+git commit -m "添加新博客：博客标题"
+git push origin main
+```
+
+#### 4. 自动化部署
+
+- GitHub Actions工作流已配置
+- 每次push到main分支时自动部署
+- 部署状态可在GitHub Actions页面查看
+
+#### 5. 更新日志
+
+- 在博客文件末尾维护更新日志
+- 记录每次更新的内容和时间
+- 示例：
+
+
+## 2.使用
+
+### 我-记录
+
+- Update Md
+- git add .
+- git commit -m "XXX"
+- git push origin main
+
+### 网站-组织、记忆
+
+- 分类（categories）：作为知识管理的主分类，我们日常生活中的分类也都是这种树状分类。
+- 标签（tags）：则是辅助，弥补树状分类的缺陷。
+- 归档（archives）：按照时间顺序排列和归纳博客文章的列表：
+
+## Ref
+
+- [git官网](https://git-scm.com/book/zh/v2)
+- [git简明指南](https://www.runoob.com/manual/git-guide/)
+- [Git基本操作流](https://www.runoob.com/git/git-basic-operations.html)
+- [Markdown中文](http://www.markdown.cn/)
+- [MDX中文文档](https://www.mdxjs.cn/docs/)
+
+
+## Changelog
+- Add 240918 03:15
+- update mdx 250310
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

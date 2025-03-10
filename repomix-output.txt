@@ -784,7 +784,7 @@ export const Container = (props: any) => {
   const { children, className, ...customMeta } = props;
   const router = useRouter();
 
-  const title = "Devpro | Portfolio Template";
+  const title = "0xDragon888 | Blog";
   const meta = {
     title,
     description: `A portfolio template for developers and designers.`,

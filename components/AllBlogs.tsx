@@ -1,8 +1,9 @@
-import { formatDate } from "@/lib/formatDate";
+import Image from 'next/image';  // 添加这行导入
+import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
-import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import { formatDate } from "@/lib/formatDate";
 
 const Blog = ({ article, hoveredIndex, setHoveredIndex, idx }: any) => {
   return (
@@ -12,6 +13,19 @@ const Blog = ({ article, hoveredIndex, setHoveredIndex, idx }: any) => {
       onMouseEnter={() => setHoveredIndex(idx)}
       onMouseLeave={() => setHoveredIndex(null)}
     >
+      {/* 添加图片显示 */}
+      {article.banner && (
+        <div className="relative w-full h-48 mb-4">
+          <Image
+            src={article.banner}
+            alt={article.title}
+            fill
+            className="object-cover rounded-lg"
+            priority
+          />
+        </div>
+      )}
+      
       <AnimatePresence>
         {hoveredIndex === idx && (
           <motion.span

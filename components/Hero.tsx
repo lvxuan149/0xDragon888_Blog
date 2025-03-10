@@ -6,7 +6,8 @@ export const Hero = () => {
   return (
     <div className="max-w-5xl mx-auto mt-10 md:mt-20 px-8">
       <h1 className="font-bold text-3xl md:text-5xl leading-tight text-zinc-50 max-w-3xl">
-        I'm an AI Native Developer{" "}
+        I'm an AI Native Developer
+        <br />
         <span className="text-primary-900">who writes code.</span>
       </h1>
       <p className="text-zinc-400 text-sm md:text-base max-w-2xl mt-8 leading-loose tracking-wide">
@@ -19,18 +20,14 @@ export const Hero = () => {
       <div className="mt-8 text-zinc-400 text-sm md:text-base max-w-2xl leading-loose tracking-wide">
         Building{" "}
         <LinkPreview
-          className={
-            "text-zinc-200 font-bold hover:text-primary-900 transition duration-150 outline-none"
-          }
+          className="text-zinc-200 font-bold hover:text-primary-900 transition duration-150 outline-none"
           url="XXX"
         >
           BookTile
         </LinkPreview>{" "}
         and{" "}
         <LinkPreview
-          className={
-            "text-zinc-200 font-bold hover:text-primary-900 transition duration-150"
-          }
+          className="text-zinc-200 font-bold hover:text-primary-900 transition duration-150"
           url="Shenzhencai"
         >
           Shenzhencai
