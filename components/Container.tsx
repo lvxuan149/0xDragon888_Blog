@@ -2,7 +2,6 @@ import clsx from "clsx";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
-import { Contact } from "./Contact";
 import { Footer } from "./Footer";
 
 import Navbar from "./Navbar/Navbar";

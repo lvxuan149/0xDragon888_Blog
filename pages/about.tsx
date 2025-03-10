@@ -39,8 +39,7 @@ export default function ProjectsPage() {
         <div>
           <h1 className="font-bold text-3xl md:text-5xl md:leading-tight text-zinc-50 max-w-3xl">
             Hey! I'm
-            <span className="text-primary-900"> 0xDragon888</span> and I'm a full
-            stack soap engineer.
+            <span className="text-primary-900"> 0xDragon888</span>
           </h1>
           <p className="text-zinc-400 text-sm md:text-base max-w-2xl mt-8 md:leading-loose tracking-wide">
             I've been obsessed with technology ever since I was a kid. When I
