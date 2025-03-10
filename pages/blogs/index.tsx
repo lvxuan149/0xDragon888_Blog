@@ -74,18 +74,18 @@ export default function BlogsPage({ blogs }: any) {
             {/* Categories section */}
             <div className="bg-zinc-800/50 rounded-xl p-6">
               <h2 className="text-xl font-bold text-zinc-100 mb-4">Categories</h2>
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 {allCategories.map((category: string) => (
                   <div key={category} className="flex items-center justify-between">
                     <Link 
                       href={`/blogs?category=${encodeURIComponent(category)}`}
-                      className="text-zinc-300 hover:text-cyan-500 transition-colors"
+                      className="px-3 py-1 bg-zinc-700/70 hover:bg-primary-900/20 text-zinc-300 hover:text-primary-700 rounded-full text-sm transition-colors"
                     >
                       {category}
+                      <span className="text-zinc-500 ml-1">
+                        ({blogs.filter((blog: any) => blog.categories?.includes(category)).length})
+                      </span>
                     </Link>
-                    <span className="text-zinc-500 text-sm">
-                      {blogs.filter((blog: any) => blog.categories?.includes(category)).length}
-                    </span>
                   </div>
                 ))}
               </div>

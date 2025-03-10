@@ -1,0 +1,42 @@
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  color: #FFFFFF;  /* 修改为白色 */
+}
+
+.timeline-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.timeline-content {
+  flex: 1;
+  color: #FFFFFF;  /* 修改为白色 */
+}
+
+.timeline-year {
+  color: #FFFFFF;  /* 修改为白色 */
+}
+
+.timeline-text {
+  color: #FFFFFF;  /* 修改为白色 */
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  width: 2px;
+  background: var(--timeline-color);
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  margin-left: -1px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .timeline::before {
+    background: var(--timeline-color);
+  }
+}

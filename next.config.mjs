@@ -16,6 +16,22 @@ const nextConfig = {
     newNextLinkBehavior: true,
     scrollRestoration: true,
   },
+  // 删除之前的 rewrites 配置
+  
+  // 添加静态文件配置
+  async headers() {
+    return [
+      {
+        source: '/_pagefind/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+    ];
+  },
 };
 
 const withMDX = nextMDX({

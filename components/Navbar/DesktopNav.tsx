@@ -1,10 +1,22 @@
 import { CustomLink } from "@/components/CustomLink";
 import { Logo } from "@/components/Logo";
 import { AnimatePresence, motion } from "framer-motion";
+import { navItems } from "@/constants/navItems";
 import Link from "next/link";
 import React, { useState } from "react";
+import Search from '../Search/Search';
 
-export const DesktopNav = ({ navItems }: any) => {
+// 将原来的动画导航组件重命名为 AnimatedDesktopNav
+interface NavItem {
+  name: string;
+  link: string;
+}
+
+interface AnimatedDesktopNavProps {
+  navItems: NavItem[];
+}
+
+export default function AnimatedDesktopNav({ navItems }: AnimatedDesktopNavProps) {
   let [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   return (
     <div className="flex flex-row space-x-8 items-center antialiased border px-4 py-2 rounded-2xl border-zinc-700/60 bg-zinc-800 ">
@@ -39,6 +51,7 @@ export const DesktopNav = ({ navItems }: any) => {
           </span>
         </CustomLink>
       ))}
+      <Search />
     </div>
   );
-};
+}

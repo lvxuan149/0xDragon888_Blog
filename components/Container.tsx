@@ -50,7 +50,6 @@ export const Container = (props: any) => {
         <Navbar />
         {children}
         <Footer />
-        <Contact />
       </main>
     </>
   );
