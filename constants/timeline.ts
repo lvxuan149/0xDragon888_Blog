@@ -1,50 +1,49 @@
 export const timeline = [
   {
-    year: 2023,
+    year: 2025,
     points: [
-      "Building a new startup, this time it's going to be a big one",
-      "Started writing blogs as a daily habit. Won the nobel prize for literature",
-      "My brother went on to pursue a career in music, he's now a famous singer",
+      "Be a Founder in  Soon （Solana L2） Ecosystem",
+      "Soon Hackathon 3rd Place",
+      "Working on Developer a Uni-V4 Dex +Meme Launchpad",
+    ],
+  },
+  {
+    year: 2024,
+    points: [
+      "Be a Developer+Coummity Leader Booming Solana Ecosystem",
+      "Speech+Course+Project+CoWorking onboarding Solana Developer ",
+      "Host 10+Developer Workshop ",
     ],
   },
   {
     year: 2022,
     points: [
-      "Bought a new M2 chip macbook pro wow this is crazy!",
-      "Broke the chip as soon as I got it, had to buy a new one",
-      "Bought a new M2 chip macbook pro and started living on the streets.",
-    ],
-  },
-  {
-    year: 2021,
-    points: [
-      "Won the interstate merathon, died 4 times on the way.",
-      "Built a side project to help the people of my country win the war against covid",
+      "Be a VC @AC Capital in shanghai ",
+      "Built a gamefi project When GameFi Booming",
       "Started a podcast with my brother, we talk about the latest tech news",
     ],
   },
   {
     year: 2020,
     points: [
-      "Back at it again, this time joined facebook as a software engineer",
-      "Went on to jump right in the metaverse, and joined Oculus as a software engineer",
-      "Champion of international tetris competition held between me and my brother",
-    ],
-  },
-  {
-    year: 2019,
-    points: [
-      "Mid life crisis and decided to change career",
-      "Went on to do a Masters in Data Science",
-      "Ended up owning a farm and a small business",
+      "Join Crypto World",
+      "DeFi Booming",
+      "Working as PM @IOST in Beijing."
     ],
   },
   {
     year: 2018,
     points: [
-      "Graduate with a Bachelor of Mathematics",
-      "Graduate with a Bachelor of Computer Science",
-      "Graduate with a Bachelor of Statistics",
+      "Joined technology media company in Beijing as a journalist",
+      "Buying the first Bitcoin in life",
+      "Learning to lose money",
+    ],
+  },
+  {
+    year: 2017,
+    points: [
+      "Graduated with a Master of Agriculture from a second-tier university in China ",
+    
     ],
   },
 ];

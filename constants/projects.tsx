@@ -2,20 +2,28 @@ import { stack } from "./stack";
 
 export const projects = [
   {
-    title: "Algochurn",
+    title: "Solar Earn",
     description:
-      "A web app that allows users to practice for front-end and UI interviews.",
-    image: "/images/projects/algochurn.png",
+      "Solana chinese Talent ecosystem for bounty tasks Launchpad.",
+    image: "/images/projects/solar.png",
     stack: [stack.nextjs, stack.tailwindcss, stack.typescript, stack.react],
-    link: "https://algochurn.com",
+    link: "https://earn.solar.team/",
   },
   {
-    title: "Box Shadows",
+    title: "Raptor",
     description:
-      "Copy and paste beautiful box shadows that stand out for your next project.",
-    image: "/images/projects/boxshadows.png",
+      "Uni-V4 Dex+Meme Lauunchpad build on Soon.",
+    image: "/images/projects/raptor.png",
     stack: [stack.nextjs, stack.tailwindcss, stack.typescript, stack.react],
-    link: "https://manuarora.in/boxshadows",
+    link: "raptoramm.com",
   },
-  
+  {
+    title: "TipConnect",
+    description:
+      "On-Chain-Gratitude Protocol for Social Payments",
+    image: "/images/projects/tipconnect.png",
+    stack: [stack.nextjs, stack.tailwindcss, stack.typescript, stack.react],
+    link: "https://tipconnect.xyz",
+  },
+
 ];

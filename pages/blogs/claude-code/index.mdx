@@ -1,0 +1,94 @@
+import { BlogLayout } from "@/components/BlogLayout";
+import banner from "./banner.png";
+import Image from "next/image";
+
+export const meta = {
+  author: "0xDragon888",
+  date: "2025-09-15",
+  title: "重新理解Claude code如何处理复杂的编码任务",
+  description: "深入理解Claude Code的AI人机协作框架,从交互方式到扩展能力的5层架构体系",
+  categories: ["AI"],
+  tags: ["Claude Code", "AI Coding", "Engineering"],
+  banner: banner
+};
+
+export default (props) => <BlogLayout meta={meta} {...props} />;
+
+<Image
+  src={banner}
+  alt="重新理解Claude code如何处理复杂的编码任务"
+  className="max-h-96 aspect-video object-cover"
+/>
+
+# 重新理解Claude code如何处理复杂的编码任务
+
+
+### 重新理解 什么是Claude code
+Input（Prompt）
+
+   ↓
+
+Loading（LLM + Memory + Tools + Environment）
+
+   ↓
+
+Output（复杂编程任务 / 工程产物）
+
+
+
+
+
+### 重新理解： AI人机协作框架
+
+层级 1：交互方式 —— 我要你做什么
+        ↓
+层级 2：上下文工程 —— 我给你什么信息
+        ↓
+层级 3：记忆与加载机制 —— 我们持续遵循什么规则和经验
+        ↓
+层级 4：工程化整合 —— 把 AI 融入工程生产体系
+        ↓
+层级 5：扩展能力 —— 扩展 AI 的感知与行动
+
+
+
+**层级 1｜交互方式 (Interaction Mode) —— 我要你做什么**
+
+• **内容**：提问 / 任务 / 对话 / 校对 / 生成 / 反馈
+
+• **作用**：定义人与 AI 的沟通形态，是最外层的交互接口。
+
+
+**层级 2｜上下文工程 (Context Engineering) —— 我给你什么信息**
+
+• **内容**：目标、角色、格式、背景、工具
+
+• **作用**：确保 AI 理解需求与约束条件，决定执行成败。
+
+
+**层级 3｜记忆与加载机制 (Memory & Loading) —— 我们持续遵循什么规则和经验**
+
+• **内容**：
+
+• 临时记忆（会话内上下文）
+
+• 项目记忆（CLAUDE.md 技术宪章）
+
+• 跨项目记忆（组织级知识库）
+
+• **作用**：保证跨任务与跨时间的连贯性与一致性。
+**层级 4｜工程化整合 (Engineering Integration) —— 把 AI 融入工程生产体系**
+
+• **内容**：测试驱动调试 / 并行智能体头脑风暴 / Git Worktree 并行开发 / 云端协作（PR、Issue、Review）
+
+• **作用**：让 AI 成为工程工作流中的"虚拟工程师"。
+
+**层级 5｜扩展能力 (Extension Capabilities) —— 扩展 AI 的感知与行动**
+
+• **内容**：
+
+• **MCP (Model Context Protocol)**：通过统一协议扩展 AI 感知范围（数据库、API、文件系统）。
+
+• **Hooks**：在 AI 的行为链路中注入中间件，用于审计、监控、增强。
+
+• **作用**：突破单一模型限制，让 AI 成为可编排的生态成员。

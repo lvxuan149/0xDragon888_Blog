@@ -1,6 +1,4 @@
 import React from "react";
-import { LinkPreview } from "./LinkPreview";
-import Link from "next/link";
 
 export const Hero = () => {
   return (
@@ -17,23 +15,6 @@ export const Hero = () => {
       <p className="text-zinc-400 text-sm md:text-base max-w-2xl mt-4 leading-loose tracking-wide">
         They not only regard AI as a tool, but also take it as part of their "native thinking" for thinking, decision-making and problem-solving, and make creative products.
       </p>
-      <div className="mt-8 text-zinc-400 text-sm md:text-base max-w-2xl leading-loose tracking-wide">
-        Building{" "}
-        <LinkPreview
-          className="text-zinc-200 font-bold hover:text-primary-900 transition duration-150 outline-none"
-          url="XXX"
-        >
-          BookTile
-        </LinkPreview>{" "}
-        and{" "}
-        <LinkPreview
-          className="text-zinc-200 font-bold hover:text-primary-900 transition duration-150"
-          url="Shenzhencai"
-        >
-          Shenzhencai
-        </LinkPreview>{" "}
-        when I'm not working on my day job.
-      </div>
     </div>
   );
 };

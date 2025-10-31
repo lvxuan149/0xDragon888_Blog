@@ -10,8 +10,7 @@ export default function ProjectsPage() {
           <span className="text-primary-900"> lot of things</span>
         </h1>
         <p className="text-zinc-400 text-sm md:text-base max-w-2xl mt-8 md:leading-loose tracking-wide">
-          Come explore the fruits of my labor, from small experiments to
-          full-blown web applications, each project showcases my love for coding
+          from small tools tofull-blown web applications, each project showcases my love for coding
           and design.
         </p>
       </div>

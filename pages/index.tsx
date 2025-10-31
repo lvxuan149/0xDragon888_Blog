@@ -2,7 +2,6 @@ import { Container } from "@/components/Container";
 import { Hero } from "@/components/Hero";
 import { Projects } from "@/components/Projects";
 import { getUserRepositories } from "@/lib/github";
-import { LatestRepos } from "@/components/LatestRepos";
 import { Repository } from "@/types/repos";
 import { generateRssFeed } from "@/lib/generateRSSFeed";
 import { getAllBlogs } from "@/lib/getAllBlogs";
@@ -18,12 +17,6 @@ export default function Home({
   repos: Repository[];
   blogs: any;
 }) {
-  const shouldShowMore = () => {
-    if (repos && repos.length > 9) {
-      return true;
-    }
-    return false;
-  };
   return (
     <Container>
       <Hero />
@@ -32,10 +25,6 @@ export default function Home({
       </h1>
 
       <Projects />
-      <h1 className="text-2xl md:text-3xl text-white font-bold max-w-5xl mx-auto px-8 mt-40 text-center">
-        Latest contributions to <span className="text-primary">open source</span>
-      </h1>
-      <LatestRepos repos={Array.isArray(repos) ? repos.slice(0, 9) : []} showMore={shouldShowMore()} />
 
       {/* 修改这里的布局，移除右侧 Uses 列 */}
       <div className="max-w-5xl mx-auto px-8 mt-40">

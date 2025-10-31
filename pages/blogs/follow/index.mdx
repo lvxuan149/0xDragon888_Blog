@@ -1,0 +1,23 @@
+import { BlogLayout } from "@/components/BlogLayout";
+import banner from "./banner.png";
+import Image from "next/image";
+
+export const meta = {
+  author: "0xDragon888",
+  date: "2024-09-22",
+  title: "Rss的过去与Follow未来",
+  description: "探索RSS技术的演进与Follow应用的未来发展",
+  categories: ["Tool"],
+  tags: ["Rss", "Follow"],
+  banner: banner
+};
+
+export default (props) => <BlogLayout meta={meta} {...props} />;
+
+<Image
+  src={banner}
+  alt="Rss的过去与Follow未来"
+  className="max-h-96 aspect-video object-cover"
+/>
+
+# Rss的过去与Follow 未来

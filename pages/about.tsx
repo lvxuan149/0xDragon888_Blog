@@ -42,7 +42,8 @@ export default function ProjectsPage() {
             <span className="text-primary-900"> 0xDragon888</span>
           </h1>
           <p className="text-zinc-400 text-sm md:text-base max-w-2xl mt-8 md:leading-loose tracking-wide">
-            I've been obsessed with technology ever since ai-ide-tool booming
+            I've been obsessed with technology ever since AI booming,
+            Such as Claude code、Codex
           </p>
         </div>
 
@@ -72,10 +73,9 @@ export default function ProjectsPage() {
       </div>
 
       <div className="max-w-5xl mx-auto px-8 mt-10 relative">
-        <p className="text-zinc-400 text-sm md:text-base mt-8 md:leading-loose tracking-wide">
-          When I'm not busy slaying bugs and writing code, 
+        <p className="text-zinc-400 text-sm md:text-base md:leading-loose tracking-wide">
         </p>
-        <p className="text-zinc-400 text-sm md:text-base mt-8 md:leading-loose tracking-wide">
+        <p className="text-zinc-400 text-sm md:text-base mt-4 md:leading-loose tracking-wide">
           Here's a timeline of what I've been upto
         </p>
         <Timeline />
