@@ -25,5 +25,13 @@ export const projects = [
     stack: [stack.nextjs, stack.tailwindcss, stack.typescript, stack.react],
     link: "https://tipconnect.xyz",
   },
+  {
+    title: "Solana Blinks Developer Course",
+    description:
+      "A comprehensive course for learning Solana Blinks development",
+    image: "/images/projects/blinks.jpg",
+    stack: [stack.nextjs, stack.tailwindcss, stack.typescript, stack.react],
+    link: "https://openbuild.xyz/learn/challenges/2046704625",
+  },
 
 ];
